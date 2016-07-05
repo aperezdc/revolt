@@ -1,0 +1,150 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+# vim:fenc=utf-8
+#
+# Copyright © 2016 Adrian Perez <aperez@igalia.com>
+#
+# Distributed under terms of the MIT license.
+
+import gi
+gi.require_version('WebKit2', '4.0')
+
+from gi.repository import WebKit2, Gtk, GLib, Gio
+
+
+class VectorWindow(object):
+    def __init__(self, app):
+        self.__app = app
+        self._webctx = self.__create_web_context()
+        self.__create_widgets()
+        self.__connect_widgets()
+
+    def __create_web_context(self):
+        ctx = WebKit2.WebContext.get_default()
+        ctx.set_web_process_count_limit(1)
+        ctx.set_spell_checking_enabled(True)
+        return ctx
+
+    def __create_widgets(self):
+        header = Gtk.HeaderBar()
+        header.set_show_close_button(True)
+
+        self._spinner = Gtk.Spinner()
+        header.pack_start(self._spinner)
+
+        self._window = Gtk.ApplicationWindow()
+        self._window.set_titlebar(header)
+        self._window.set_title("Vector")
+        self._window.set_default_icon_name("irc-chat")
+        self.__app.add_window(self._window)
+
+        self._webview = WebKit2.WebView.new_with_context(self._webctx)
+        if hasattr(self._webview, "set_maintains_back_forward_list"):
+            self._webview.set_maintains_back_forward_list(False)
+        websettings = self._webview.get_settings()
+        websettings.set_allow_file_access_from_file_urls(True)
+        websettings.set_allow_modal_dialogs(False)  # TODO
+        websettings.set_enable_fullscreen(False)
+        websettings.set_enable_java(False)
+        websettings.set_enable_media_stream(True)
+        websettings.set_enable_page_cache(False)  # Single-page app
+        websettings.set_enable_plugins(False)
+        websettings.set_enable_smooth_scrolling(True)
+        websettings.set_enable_webaudio(True)
+        websettings.set_enable_write_console_messages_to_stdout(True)
+        websettings.set_javascript_can_access_clipboard(True)
+        websettings.set_minimum_font_size(12)  # TODO: Make it a setting
+        websettings.set_property("enable-mediasource", True)
+        self._window.add(self._webview)
+
+    def __on_has_toplevel_focus_changed(self, window, value):
+        # Clear the window's urgency hint
+        window.set_urgency_hint(False)
+
+    def __on_window_close(self, window):
+        # TODO: Do cleanup here
+        window.hide()
+        return False
+
+    def __on_load_changed(self, webview, event):
+        if event == WebKit2.LoadEvent.STARTED:
+            self._spinner.start()
+        elif event == WebKit2.LoadEvent.FINISHED:
+            self._spinner.stop()
+
+    def __on_show_notification(self, webview, notification):
+        # TODO: Handle notification clicked, and so
+        if not self._window.has_toplevel_focus():
+            self._window.set_urgency_hint(True)
+        notif = Gio.Notification.new(notification.get_title())
+        notif.set_body(notification.get_body())
+        notif.set_icon(Gio.ThemedIcon.new("irc-chat"))
+        print(notif)
+        self.__app.send_notification("webkit:" + str(notification.get_id()), notif)
+        return True
+
+    def __on_permission_request(self, webview, request):
+        if isinstance(request, WebKit2.NotificationPermissionRequest):
+            request.allow()
+            return True
+
+    def __connect_widgets(self):
+        self._window.connect("destroy", self.__on_window_close)
+        self._window.connect("notify::has-toplevel-focus", self.__on_has_toplevel_focus_changed)
+        self._webview.connect("load-changed", self.__on_load_changed)
+        self._webview.connect("show-notification", self.__on_show_notification)
+        self._webview.connect("permission-request", self.__on_permission_request)
+
+    def run(self, url):
+        self._window.set_default_size(900, 600)
+        self._webview.load_uri(url)
+        return self
+
+    def show(self):
+        self._window.show_all()
+        self._window.present()
+        return self
+
+    def finish(self):
+        print("Finish...")
+        self._webview.stop_loading()
+        self._window.hide()
+        self._window.destroy()
+        del self._webview
+        return self
+
+
+class VectorApp(Gtk.Application):
+    def __init__(self, hs):
+        Gtk.Application.__init__(self,
+                application_id = "com.igalia.VectorGnome",
+                flags = Gio.ApplicationFlags.FLAGS_NONE)
+        self.homeserver = hs
+        self.vector = None
+        self.connect("shutdown", self.__on_shutdown)
+        self.connect("activate", self.__on_activate)
+        self.connect("startup", self.__on_startup)
+
+    def __on_startup(self, app):
+        print("* App Startup...")
+        Gtk.Settings.get_default().set_property("gtk-application-prefer-dark-theme", True)
+
+    def __on_shutdown(self, app):
+        print("* App Shutdown...")
+        if self.vector is not None:
+            self.vector.finish()
+
+    def __on_activate(self, app):
+        print("* App Activated...")
+        if self.vector is None:
+            self.vector = VectorWindow(self).run(self.homeserver)
+        self.vector.show()
+
+
+def main():
+    import sys
+    HS = sys.argv[1] if len(sys.argv) > 1 else "https://matrix.igalia.com"
+    VectorApp(HS).run(sys.argv[2:])
+
+if __name__ == "__main__": main()
+
