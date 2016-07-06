@@ -96,10 +96,10 @@ install-setup () {
 	fi
 }
 
-# install-show <INSTALL | REMOVE> <destination>
+# install-show <INSTALL | REMOVE | ...> <destination>
 install-show () {
 	local prepend="[[1;1m$1[0;0m] "
-	if [[ -n ${install_destdir} ]] ; then
+	if [[ -n ${install_destdir} && ( $1 = INSTALL || $1 = REMOVE ) ]] ; then
 		prepend="[[1;1m$1[0;0m] [33m${install_destdir}[0;0m"
 	fi
 	echo "${prepend}$2"
@@ -148,12 +148,45 @@ install-prefixed () {
 # install-icon <name> <size> <category> <file> [theme]
 # TODO: Make this use install-prefixed, and change that to allow passing
 #       destination file names.
+declare -a install_icon_update_themes=( )
 install-icon () {
 	local ext=${4#*.}
-	install-exec "$4" "${install_prefix}/share/icons/${5:-hicolor}/${2}x${2}/$3/$1.${ext}" -m644
+	local theme=${5:-hicolor}
+
+	install-exec "$4" "${install_prefix}/share/icons/${theme}/${2}x${2}/$3/$1.${ext}" -m644
+
+	local t
+	for t in "${install_icon_update_themes[@]}" ; do
+		if [[ ${t} = ${theme} ]] ; then
+			return
+		fi
+	done
+	install_icon_update_themes=( "${install_icon_update_themes[@]}" "${theme}" )
+}
+
+install-update-gtk-icon-theme-caches () {
+	if [[ -n ${install_destdir} ]] ; then
+		install-show SKIPPED "gtk-update-icon-cache (--destdir is in use)"
+		return
+	fi
+	local updater=$(type -P gtk-update-icon-cache)
+	if [[ -z ${updater} ]] ; then
+		install-show SKIPPED "gtk-update-icon-cache (program not found)"
+		return
+	fi
+	local theme
+	for theme in "${install_icon_update_themes[@]}" ; do
+		if ${install_pretend} ; then
+			echo "'${updater}' -q '${install_prefix}/share/icons/${theme}'"
+		else
+			install-show EXEC "gtk-update-icon-cache: ${theme}"
+			"${updater}" -q "${install_prefix}/share/icons/${theme}"
+		fi
+	done
 }
 
 # install-bin <filename> [install-options...]
 # install-desktop-file <filename> [install-options...]
 install-bin () { install-prefixed bin "$@" -m755 ; }
 install-desktop-file () { install-prefixed share/applications "$@" -m644 ; }
+install-finish () { install-update-gtk-icon-theme-caches ; }
