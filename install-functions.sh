@@ -92,7 +92,7 @@ install-setup () {
 		fi
 
 		# Truncate the log file
-		: > "${install_log_file}"
+		${install_pretend} || : > "${install_log_file}"
 	fi
 }
 
