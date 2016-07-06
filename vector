@@ -35,7 +35,7 @@ class VectorWindow(object):
         self._window = Gtk.ApplicationWindow()
         self._window.set_titlebar(header)
         self._window.set_title("Vector")
-        self._window.set_default_icon_name("irc-chat")
+        self._window.set_default_icon_name("vector-gnome")
         self.__app.add_window(self._window)
 
         self._webview = WebKit2.WebView.new_with_context(self._webctx)
@@ -78,7 +78,7 @@ class VectorWindow(object):
             self._window.set_urgency_hint(True)
         notif = Gio.Notification.new(notification.get_title())
         notif.set_body(notification.get_body())
-        notif.set_icon(Gio.ThemedIcon.new("irc-chat"))
+        notif.set_icon(Gio.ThemedIcon.new("vector-gnome"))
         print(notif)
         self.__app.send_notification("webkit:" + str(notification.get_id()), notif)
         return True
