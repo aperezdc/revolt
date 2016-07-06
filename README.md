@@ -7,8 +7,7 @@ Setup
 Install the files to their locations:
 
 ```sh
-sudo cp vector /usr/bin
-sudo cp com.igalia.VectorGnome.desktop /usr/share/applications/
+sudo ./install.sh --prefix=/usr
 ```
 
 Install the dependencies:
