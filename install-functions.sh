@@ -145,6 +145,14 @@ install-prefixed () {
 	install-exec "${filename}" "${install_prefix}/${relpath}/$(basename "${filename}")" "$@"
 }
 
+# install-icon <name> <size> <category> <file> [theme]
+# TODO: Make this use install-prefixed, and change that to allow passing
+#       destination file names.
+install-icon () {
+	local ext=${4#*.}
+	install-exec "$4" "${install_prefix}/share/icons/${5:-hicolor}/${2}x${2}/$3/$1.${ext}" -m644
+}
+
 # install-bin <filename> [install-options...]
 # install-desktop-file <filename> [install-options...]
 install-bin () { install-prefixed bin "$@" -m755 ; }
