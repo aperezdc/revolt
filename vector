@@ -67,10 +67,10 @@ class VectorWindow(object):
         return False
 
     def __on_load_changed(self, webview, event):
-        if event == WebKit2.LoadEvent.STARTED:
-            self._spinner.start()
-        elif event == WebKit2.LoadEvent.FINISHED:
+        if event == WebKit2.LoadEvent.FINISHED:
             self._spinner.stop()
+        else:
+            self._spinner.start()
 
     def __on_show_notification(self, webview, notification):
         # TODO: Handle notification clicked, and so
