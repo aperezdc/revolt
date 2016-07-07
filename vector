@@ -30,7 +30,7 @@ class VectorWindow(object):
         header.set_show_close_button(True)
 
         self._spinner = Gtk.Spinner()
-        header.pack_start(self._spinner)
+        header.pack_end(self._spinner)
 
         self._window = Gtk.ApplicationWindow()
         self._window.set_titlebar(header)
