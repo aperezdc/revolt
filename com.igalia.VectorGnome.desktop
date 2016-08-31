@@ -8,6 +8,5 @@ Comment=Connect to the Matrix chat network
 Type=Application
 NoDisplay=false
 StartupNotify=true
-StartupWmClass=Vector
 Categories=GNOME;GTK;Network
 Terminal=false
