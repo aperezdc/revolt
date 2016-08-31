@@ -38,11 +38,14 @@ from old versions. Also, the log file will be updated with every upgrade.
 
 ### Flatpak
 
-A basic, still not working flatpak can be created with the following commands:
+A bundle can be created using the included [make-flatpak.sh](make-flatpak.sh)
+script. The script can be checked for details on how to manually create the
+Flatpak bundle.
 
+Once the bundle is created, you can install and run it with:
+
+```sh
+flatpak install --user --bundle com.igalia.VectorGnome.flatpak
+flatpak run com.igalia.VectorGnome
 ```
-flatpak build-init builddir com.igalia.VectorGnome org.gnome.Sdk org.gnome.Platform 3.20
-flatpak build builddir ./install.sh --prefix=/app
-flatpak build-finish .builddir --socket=x11 --share=network --command=vector
-flatpak build-export repodir builddir
-```
+
