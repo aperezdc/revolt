@@ -13,7 +13,7 @@ install-bin vector
 install-desktop-file com.igalia.VectorGnome.desktop
 
 for size in 32 48 64 128 ; do
-	install-icon vector-gnome ${size} apps assets/icon-${size}.png
+	install-icon com.igalia.VectorGnome ${size} apps assets/icon-${size}.png
 done
 
 install-finish
