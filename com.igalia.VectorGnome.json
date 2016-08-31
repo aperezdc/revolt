@@ -1,0 +1,23 @@
+{
+  "app-id": "com.igalia.VectorGnome",
+  "runtime": "org.gnome.Platform",
+  "runtime-version": "3.20",
+  "sdk": "org.gnome.Sdk",
+  "command": "vector",
+  "finish-args": [ 
+     "--socket=x11", 
+     "--share=network"  
+  ],
+  "modules": [
+    {
+      "name": "vector-gnome",
+      "no-autogen": true,
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://gogs.igalia.com/aperez/vector-gnome.git"
+        }
+      ]
+    }
+  ]
+}
