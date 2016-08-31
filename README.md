@@ -35,3 +35,14 @@ sudo ./install.sh --upgrade --prefix=/usr --log-file=/etc/vector-gnome.files
 This way a log of the installed files is recorded the first time that the
 installation is done, and further upgrades will use it to remove stray files
 from old versions. Also, the log file will be updated with every upgrade.
+
+### Flatpak
+
+A basic, still not working flatpak can be created with the following commands:
+
+```
+flatpak build-init builddir com.igalia.VectorGnome org.gnome.Sdk org.gnome.Platform 3.20
+flatpak build builddir ./install.sh --prefix=/app
+flatpak build-finish .builddir --socket=x11 --share=network --command=vector
+flatpak build-export repodir builddir
+```
