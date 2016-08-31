@@ -4,10 +4,20 @@
   "runtime-version": "3.20",
   "sdk": "org.gnome.Sdk",
   "command": "vector",
-  "finish-args": [ 
-     "--socket=x11", 
-     "--share=network"  
+  "finish-args": [
+    "--device=dri",
+    "--share=network",
+    "--share=ipc",
+    "--socket=x11",
+    "--socket=pulseaudio",
+    "--socket=session-bus",
+    "--own-name=com.igalia.VectorGnome",
+    "--talk-name=org.freedesktop.Notifications",
+    "--talk-name=org.gtk.Notifications"
   ],
+  "build-options": {
+    "strip": false
+  },
   "modules": [
     {
       "name": "vector-gnome",
