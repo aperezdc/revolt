@@ -96,7 +96,7 @@ class VectorWindow(object):
         self._webview.connect("permission-request", self.__on_permission_request)
 
     def run(self, url):
-        self._window.set_default_size(900, 600)
+        self._window.set_default_size(900, 700)
         self._webview.load_uri(url)
         return self
 
