@@ -4,10 +4,10 @@ set -e
 readonly NAME='com.igalia.VectorGnome'
 readonly BUILDDIR="$(dirname "$0")/.flatpak-build"
 readonly REPODIR="$(dirname "$0")/.flatpak-repo"
-readonly GNOMEVER='3.20'
+readonly GNOMEVER='3.22'
 
 cleanup () {
-	rm -rf "${BUILDDIR}" "${REPODIR}"
+	rm -rf "${BUILDDIR}"
 }
 trap cleanup EXIT
 
@@ -31,6 +31,9 @@ flatpak build-export "${REPODIR}" "${BUILDDIR}"
 
 if [[ -n ${EMAIL} ]] ; then
 	flatpak build-sign --gpg-sign="${EMAIL}" "${REPODIR}" "${NAME}"
+	flatpak build-update-repo --title=Vector --gpg-sign="${EMAIL}"
+else
+	flatpak build-update-repo --title=Vector
 fi
 
 flatpak build-bundle "${REPODIR}" "${NAME}.flatpak" "${NAME}"
