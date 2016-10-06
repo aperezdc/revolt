@@ -35,7 +35,7 @@ class VectorWindow(object):
         self._window = Gtk.ApplicationWindow()
         self._window.set_titlebar(header)
         self._window.set_title("Vector")
-        self._window.set_default_icon_name("vector-gnome")
+        self._window.set_default_icon_name("com.igalia.VectorGnome")
         self.__app.add_window(self._window)
 
         self._webview = WebKit2.WebView.new_with_context(self._webctx)
