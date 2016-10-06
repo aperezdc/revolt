@@ -31,9 +31,9 @@ flatpak build-export "${REPODIR}" "${BUILDDIR}"
 
 if [[ -n ${EMAIL} ]] ; then
 	flatpak build-sign --gpg-sign="${EMAIL}" "${REPODIR}" "${NAME}"
-	flatpak build-update-repo --title=Vector --gpg-sign="${EMAIL}"
+	flatpak build-update-repo --title=Vector --gpg-sign="${EMAIL}" "${REPODIR}"
 else
-	flatpak build-update-repo --title=Vector
+	flatpak build-update-repo --title=Vector "${REPODIR}"
 fi
 
 flatpak build-bundle "${REPODIR}" "${NAME}.flatpak" "${NAME}"
