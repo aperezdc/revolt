@@ -1,7 +1,7 @@
 {
   "app-id": "com.igalia.VectorGnome",
   "runtime": "org.gnome.Platform",
-  "runtime-version": "3.20",
+  "runtime-version": "3.22",
   "sdk": "org.gnome.Sdk",
   "command": "vector",
   "finish-args": [
@@ -21,7 +21,6 @@
   "modules": [
     {
       "name": "vector-gnome",
-      "no-autogen": true,
       "sources": [
         {
           "type": "git",
