@@ -4,6 +4,6 @@ all:
 	@echo 'Nothing to build'
 
 install:
-	./install.sh --prefix='$(PREFIX)' $(if $(DESTDIR),--destdir='$(DESTDIR)')
+	SKIP_ICON_CACHE_UPDATE=1 ./install.sh --prefix='$(PREFIX)' $(if $(DESTDIR),--destdir='$(DESTDIR)')
 
 .PHONY: install

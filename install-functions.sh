@@ -165,6 +165,10 @@ install-icon () {
 }
 
 install-update-gtk-icon-theme-caches () {
+	if [[ -n ${SKIP_ICON_CACHE_UPDATE} && ${SKIP_ICON_CACHE_UPDATE} -ne 0 ]] ; then
+		install-show SKIPPED "gtk-update-icon-cache (SKIP_ICON_CACHE_UPDATE)"
+		return
+	fi
 	if [[ -n ${install_destdir} ]] ; then
 		install-show SKIPPED "gtk-update-icon-cache (--destdir is in use)"
 		return
