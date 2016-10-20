@@ -39,8 +39,13 @@ from old versions. Also, the log file will be updated with every upgrade.
 ### Flatpak
 
 A bundle can be created using the included [make-flatpak.sh](make-flatpak.sh)
-script. The script can be checked for details on how to manually create the
-Flatpak bundle.
+script. The script arranges calling `flatpak-builder` to build and create a
+repository into `.flatpak-repo`. You can create a bundle from the repository
+using:
+
+```sh
+flatpak build-bundle .flatpak-repo/ vector-gnome.flatpak com.igalia.VectorGnome
+```
 
 Once the bundle is created, you can install and run it with:
 
