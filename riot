@@ -159,5 +159,9 @@ def main():
     HS = sys.argv[1] if len(sys.argv) > 1 else "https://matrix.igalia.com"
     RiotApp(HS).run(sys.argv[2:])
 
-if __name__ == "__main__": main()
+if __name__ == "__main__":
+    # Honor CTRL+C http://stackoverflow.com/q/16410852
+    import signal
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+    main()
 
