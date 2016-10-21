@@ -50,7 +50,7 @@ flatpak build-bundle .flatpak-repo/ vector-gnome.flatpak com.igalia.VectorGnome
 Once the bundle is created, you can install and run it with:
 
 ```sh
-flatpak install --user --bundle com.igalia.VectorGnome.flatpak
+flatpak install --user --from vector-gnome.flatpakref
 flatpak run com.igalia.VectorGnome
 ```
 
