@@ -9,7 +9,7 @@
 import gi
 gi.require_version('WebKit2', '4.0')
 
-from gi.repository import WebKit2, Gtk, GLib, Gio
+from gi.repository import WebKit2, Gtk, GLib, Gio, Gdk
 
 
 class VectorWindow(object):
@@ -39,6 +39,7 @@ class VectorWindow(object):
         self.__app.add_window(self._window)
 
         self._webview = WebKit2.WebView.new_with_context(self._webctx)
+        self._webview.connect("decide-policy", self.__on_decide_policy)
         if hasattr(self._webview, "set_maintains_back_forward_list"):
             self._webview.set_maintains_back_forward_list(False)
         websettings = self._webview.get_settings()
@@ -56,6 +57,15 @@ class VectorWindow(object):
         websettings.set_minimum_font_size(12)  # TODO: Make it a setting
         websettings.set_property("enable-mediasource", True)
         self._window.add(self._webview)
+
+    def __on_decide_policy(self, webview, decision, decision_type):
+        if decision_type in (WebKit2.PolicyDecisionType.NAVIGATION_ACTION,
+                WebKit2.PolicyDecisionType.NEW_WINDOW_ACTION):
+            if decision.get_navigation_type() == WebKit2.NavigationType.LINK_CLICKED:
+                request = decision.get_request()
+                Gtk.show_uri(None, request.get_uri(), Gdk.CURRENT_TIME)
+                return False
+        return False
 
     def __on_has_toplevel_focus_changed(self, window, value):
         # Clear the window's urgency hint
