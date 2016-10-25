@@ -12,6 +12,8 @@
     "--socket=wayland",
     "--socket=pulseaudio",
     "--socket=session-bus",
+    "--filesystem=xdg-documents",
+    "--filesystem=xdg-pictures",
     "--own-name=com.igalia.VectorGnome",
     "--talk-name=org.freedesktop.Notifications",
     "--talk-name=org.gtk.Notifications"
