@@ -79,8 +79,11 @@ class VectorWindow(object):
         notif = Gio.Notification.new(notification.get_title())
         notif.set_body(notification.get_body())
         notif.set_icon(Gio.ThemedIcon.new("vector-gnome"))
+        notif.set_priority(Gio.NotificationPriority.HIGH)
         print(notif)
-        self.__app.send_notification("webkit:" + str(notification.get_id()), notif)
+        # use title as notification id:
+        # allows to reuse one notification for the same conversation
+        self.__app.send_notification(notification.get_title(), notif)
         return True
 
     def __on_permission_request(self, webview, request):
