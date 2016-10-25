@@ -12,7 +12,7 @@ gi.require_version('WebKit2', '4.0')
 from gi.repository import WebKit2, Gtk, GLib, Gio, Gdk
 
 
-class VectorWindow(object):
+class RiotWindow(object):
     def __init__(self, app):
         self.__app = app
         self._webctx = self.__create_web_context()
@@ -22,7 +22,8 @@ class VectorWindow(object):
     def __create_web_context(self):
         ctx = WebKit2.WebContext.get_default()
         ctx.set_web_process_count_limit(1)
-        ctx.set_spell_checking_enabled(True)
+        ctx.set_spell_checking_enabled(False)
+        ctx.set_tls_errors_policy(WebKit2.TLSErrorsPolicy.FAIL)
         return ctx
 
     def __create_widgets(self):
@@ -34,7 +35,7 @@ class VectorWindow(object):
 
         self._window = Gtk.ApplicationWindow()
         self._window.set_titlebar(header)
-        self._window.set_title("Vector")
+        self._window.set_title("Riot")
         self._window.set_default_icon_name("com.igalia.VectorGnome")
         self.__app.add_window(self._window)
 
@@ -88,9 +89,8 @@ class VectorWindow(object):
             self._window.set_urgency_hint(True)
         notif = Gio.Notification.new(notification.get_title())
         notif.set_body(notification.get_body())
-        notif.set_icon(Gio.ThemedIcon.new("vector-gnome"))
+        notif.set_icon(Gio.ThemedIcon.new("com.igalia.VectorGnome"))
         notif.set_priority(Gio.NotificationPriority.HIGH)
-        print(notif)
         # use title as notification id:
         # allows to reuse one notification for the same conversation
         self.__app.send_notification(notification.get_title(), notif)
@@ -127,13 +127,13 @@ class VectorWindow(object):
         return self
 
 
-class VectorApp(Gtk.Application):
+class RiotApp(Gtk.Application):
     def __init__(self, hs):
         Gtk.Application.__init__(self,
                 application_id = "com.igalia.VectorGnome",
                 flags = Gio.ApplicationFlags.FLAGS_NONE)
         self.homeserver = hs
-        self.vector = None
+        self.riot = None
         self.connect("shutdown", self.__on_shutdown)
         self.connect("activate", self.__on_activate)
         self.connect("startup", self.__on_startup)
@@ -144,20 +144,20 @@ class VectorApp(Gtk.Application):
 
     def __on_shutdown(self, app):
         print("* App Shutdown...")
-        if self.vector is not None:
-            self.vector.finish()
+        if self.riot is not None:
+            self.riot.finish()
 
     def __on_activate(self, app):
         print("* App Activated...")
-        if self.vector is None:
-            self.vector = VectorWindow(self).run(self.homeserver)
-        self.vector.show()
+        if self.riot is None:
+            self.riot = RiotWindow(self).run(self.homeserver)
+        self.riot.show()
 
 
 def main():
     import sys
     HS = sys.argv[1] if len(sys.argv) > 1 else "https://matrix.igalia.com"
-    VectorApp(HS).run(sys.argv[2:])
+    RiotApp(HS).run(sys.argv[2:])
 
 if __name__ == "__main__": main()
 

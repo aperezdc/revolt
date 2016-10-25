@@ -19,7 +19,7 @@ Install the dependencies:
 sudo apt-get install python-gobject libwebkit2gtk-4.0
 ```
 
-Now you should be able to launch Vector from the GNOME Shell.
+Now you should be able to launch Riot from the GNOME Shell.
 
 ### Upgrading
 
@@ -29,7 +29,7 @@ process can remove stray files from the old version. In general, the preferred
 way of invoking the installation script is as follows:
 
 ```sh
-sudo ./install.sh --upgrade --prefix=/usr --log-file=/etc/vector-gnome.files
+sudo ./install.sh --upgrade --prefix=/usr --log-file=/etc/riot-gnome.files
 ```
 
 This way a log of the installed files is recorded the first time that the

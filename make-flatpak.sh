@@ -14,7 +14,7 @@ declare -a buildargs=(
 	--force-clean
 	--require-changes
 	--repo="${REPODIR}"
-	--subject="Vector-GNOME $(date +%Y%m%d).$(git describe --always --tags)"
+	--subject="Riot $(date +%Y%m%d).$(git describe --always --tags)"
 )
 
 if [[ -n ${EMAIL} ]] ; then

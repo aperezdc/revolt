@@ -9,11 +9,12 @@
 source "$(dirname "$0")/install-functions.sh"
 install-setup "$0" "$@"
 
-install-bin vector
+install-bin riot
 install-desktop-file com.igalia.VectorGnome.desktop
 
 for size in 32 48 64 128 ; do
-	install-icon com.igalia.VectorGnome ${size} apps assets/icon-${size}.png
+	install-icon com.igalia.VectorGnome ${size} apps assets/riot-${size}.png
 done
+install-icon com.igalia.VectorGnome scalable apps assets/riot.svg
 
 install-finish

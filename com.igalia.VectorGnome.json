@@ -3,7 +3,7 @@
   "runtime": "org.gnome.Platform",
   "runtime-version": "3.22",
   "sdk": "org.gnome.Sdk",
-  "command": "vector",
+  "command": "riot",
   "finish-args": [
     "--device=dri",
     "--share=network",

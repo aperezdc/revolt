@@ -1,8 +1,8 @@
 [Desktop Entry]
 Hidden=false
-Name=Vector
-Exec=vector
-TryExec=vector
+Name=Riot
+Exec=riot
+TryExec=riot
 Icon=com.igalia.VectorGnome
 Comment=Connect to the Matrix chat network
 Type=Application
