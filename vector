@@ -79,6 +79,7 @@ class VectorWindow(object):
         notif = Gio.Notification.new(notification.get_title())
         notif.set_body(notification.get_body())
         notif.set_icon(Gio.ThemedIcon.new("vector-gnome"))
+        notif.set_priority(Gio.NotificationPriority.HIGH)
         print(notif)
         # use title as notification id:
         # allows to reuse one notification for the same conversation
