@@ -1,5 +1,5 @@
-Vector GNOME
-============
+<s>Vector</s> Riot <s>GNOME</s>
+===============================
 
 Installation
 ------------
