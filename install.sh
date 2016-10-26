@@ -16,5 +16,6 @@ for size in 16 32 48 64 128 256 ; do
 	install-icon com.igalia.VectorGnome ${size} apps assets/riot-${size}.png
 done
 install-icon com.igalia.VectorGnome scalable apps assets/riot.svg
+install-icon com.igalia.VectorGnome symbolic apps assets/riot-symbolic.svg
 
 install-finish

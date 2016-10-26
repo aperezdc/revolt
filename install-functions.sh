@@ -150,10 +150,23 @@ install-prefixed () {
 #       destination file names.
 declare -a install_icon_update_themes=( )
 install-icon () {
+	local name=${1}
+	local size=${2}
 	local ext=${4#*.}
 	local theme=${5:-hicolor}
 
-	install-exec "$4" "${install_prefix}/share/icons/${theme}/${2}x${2}/$3/$1.${ext}" -m644
+	case ${size} in
+	   scalable)
+	      ;; # Nothing
+	   symbolic)
+	      name="${name}-symbolic"
+	      ;;
+	   *)
+	      size="${size}x${size}"
+	      ;;
+	esac
+
+	install-exec "$4" "${install_prefix}/share/icons/${theme}/${size}/$3/${name}.${ext}" -m644
 
 	local t
 	for t in "${install_icon_update_themes[@]}" ; do
