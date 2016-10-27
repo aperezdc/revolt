@@ -4,6 +4,38 @@
 Installation
 ------------
 
+The recommended installation method is to use [Flatpak](http://flatpak.org).
+Starting with version `0.6.13` using a single command is enough (if you want to
+intall in you user directory, add `--user` to the command):
+
+```sh
+flatpak install --from http://people.igalia.com/aperez/flatpak/vector-gnome.flatpakref
+```
+
+Once installed, updates will be installed automatically when using `flatpak update`.
+
+You can also download [the .flatpakref
+file](http://people.igalia.com/aperez/flatpak/vector-gnome.flatpakref) and
+double-click on it to have GNOME Software install the application. GNOME
+Software will also notify you of updates and give you the option to install
+them.
+
+### Portal Helpers
+
+**IMPORTANT**: Many distributions *do not* install the XDG helper programs for
+the sandboxed applications, which are needed for some features to work. Please
+install them using your distribution's package manager:
+
+* Debian: [xdg-desktop-portal-gtk](https://packages.debian.org/search?keywords=xdg-desktop-portal-gtk).
+* Arch Linux: [xdg-desktop-portal-gtk](https://aur.archlinux.org/packages/xdg-desktop-portal-gtk/) (AUR).
+
+Some features, remarkably the desktop notifications, _will not work without the
+portal helpers_.
+
+
+Manual Installation
+-------------------
+
 Install the files to their locations:
 
 ```sh
@@ -36,7 +68,8 @@ This way a log of the installed files is recorded the first time that the
 installation is done, and further upgrades will use it to remove stray files
 from old versions. Also, the log file will be updated with every upgrade.
 
-### Flatpak
+Flatpak
+-------
 
 A bundle can be created using the included [make-flatpak.sh](make-flatpak.sh)
 script. The script arranges calling `flatpak-builder` to build and create a
@@ -50,7 +83,7 @@ flatpak build-bundle .flatpak-repo/ vector-gnome.flatpak com.igalia.VectorGnome
 Once the bundle is created, you can install and run it with:
 
 ```sh
-flatpak install --user --from vector-gnome.flatpakref
+flatpak install --user --bundle vector-gnome.flatpak
 flatpak run com.igalia.VectorGnome
 ```
 
