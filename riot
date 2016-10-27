@@ -60,12 +60,16 @@ class RiotWindow(object):
         self._window.add(self._webview)
 
     def __on_decide_policy(self, webview, decision, decision_type):
-        if decision_type in (WebKit2.PolicyDecisionType.NAVIGATION_ACTION,
-                WebKit2.PolicyDecisionType.NEW_WINDOW_ACTION):
+        if decision_type == WebKit2.PolicyDecisionType.NAVIGATION_ACTION:
             if decision.get_navigation_type() == WebKit2.NavigationType.LINK_CLICKED:
-                request = decision.get_request()
-                Gtk.show_uri(None, request.get_uri(), Gdk.CURRENT_TIME)
-                return False
+                uri = decision.get_request().get_uri()
+                if not uri.startswith(self.homeserver):
+                    Gtk.show_uri(uri)
+                    return True
+        elif decision_type == WebKit2.PolicyDecisionType.NEW_WINDOW_ACTION:
+            if decision.get_navigation_type() == WebKit2.NavigationType.LINK_CLICKED:
+                Gtk.show_uri(None, decision.get_request().get_uri(), Gdk.CURRENT_TIME)
+                return True
         return False
 
     def __on_has_toplevel_focus_changed(self, window, value):
@@ -109,6 +113,7 @@ class RiotWindow(object):
         self._webview.connect("permission-request", self.__on_permission_request)
 
     def run(self, url):
+        self.homeserver = url
         self._window.set_default_size(900, 700)
         self._webview.load_uri(url)
         return self
