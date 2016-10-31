@@ -1,9 +1,9 @@
 [Desktop Entry]
 Hidden=false
-Name=Riot
-Exec=riot
-TryExec=riot
-Icon=com.igalia.VectorGnome
+Name=Revolt
+Exec=revolt
+TryExec=revolt
+Icon=org.perezdecastro.Revolt
 Comment=Connect to the Matrix chat network
 Type=Application
 NoDisplay=false

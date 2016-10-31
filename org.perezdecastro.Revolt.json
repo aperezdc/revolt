@@ -1,9 +1,9 @@
 {
-  "app-id": "com.igalia.VectorGnome",
+  "app-id": "org.perezdecastro.Revolt",
   "runtime": "org.gnome.Platform",
   "runtime-version": "3.22",
   "sdk": "org.gnome.Sdk",
-  "command": "riot",
+  "command": "revolt",
   "finish-args": [
     "--device=dri",
     "--share=network",
@@ -14,7 +14,7 @@
     "--socket=session-bus",
     "--filesystem=xdg-documents",
     "--filesystem=xdg-pictures",
-    "--own-name=com.igalia.VectorGnome",
+    "--own-name=org.perezdecastro.Revolt",
     "--talk-name=org.freedesktop.Notifications",
     "--talk-name=org.gtk.Notifications"
   ],
@@ -23,11 +23,11 @@
   },
   "modules": [
     {
-      "name": "vector-gnome",
+      "name": "revolt",
       "sources": [
         {
           "type": "git",
-          "url": "https://gogs.igalia.com/aperez/vector-gnome.git"
+          "url": "https://github.com/aperezdc/revolt.git"
         }
       ]
     }

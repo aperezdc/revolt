@@ -6,16 +6,18 @@
 # Distributed under terms of the MIT license.
 #
 
+declare -r APP_ID='org.perezdecastro.Revolt'
+
 source "$(dirname "$0")/install-functions.sh"
 install-setup "$0" "$@"
 
-install-bin riot
-install-desktop-file com.igalia.VectorGnome.desktop
+install-bin revolt
+install-desktop-file "${APP_ID}.desktop"
 
 for size in 16 32 48 64 128 256 ; do
-	install-icon com.igalia.VectorGnome ${size} apps assets/riot-${size}.png
+	install-icon "${APP_ID}" ${size} apps assets/icon-${size}.png
 done
-install-icon com.igalia.VectorGnome scalable apps assets/riot.svg
-install-icon com.igalia.VectorGnome symbolic apps assets/riot-symbolic.svg
+install-icon "${APP_ID}" scalable apps assets/icon.svg
+install-icon "${APP_ID}" symbolic apps assets/icon-symbolic.svg
 
 install-finish

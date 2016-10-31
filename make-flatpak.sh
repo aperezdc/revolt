@@ -14,7 +14,7 @@ declare -a buildargs=(
 	--force-clean
 	--require-changes
 	--repo="${REPODIR}"
-	--subject="Riot $(date +%Y%m%d).$(git describe --always --tags)"
+	--subject="Revolt $(date +%Y%m%d).$(git describe --always --tags)"
 )
 
 if [[ -n ${EMAIL} ]] ; then
@@ -22,5 +22,5 @@ if [[ -n ${EMAIL} ]] ; then
 fi
 
 set -x
-exec flatpak-builder "${buildargs[@]}" "${BUILDDIR}" com.igalia.VectorGnome.json
+exec flatpak-builder "${buildargs[@]}" "${BUILDDIR}" com.igalia.Revolt.json
 

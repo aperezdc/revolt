@@ -1,5 +1,10 @@
-<s>Vector</s> Riot <s>GNOME</s>
-===============================
+Revolt
+======
+
+Revolt is a small application which wraps [Riot](https://riot.im) to provide
+better integration with desktop environments in general, and
+[GNOME](http://www.gnome.org) in particular.
+
 
 Installation
 ------------
@@ -9,16 +14,15 @@ Starting with version `0.6.13` using a single command is enough (if you want to
 intall in you user directory, add `--user` to the command):
 
 ```sh
-flatpak install --from http://people.igalia.com/aperez/flatpak/vector-gnome.flatpakref
+flatpak install --from https://flatpak.perezdecastro.org/revolt
 ```
 
 Once installed, updates will be installed automatically when using `flatpak update`.
 
 You can also download [the .flatpakref
-file](http://people.igalia.com/aperez/flatpak/vector-gnome.flatpakref) and
-double-click on it to have GNOME Software install the application. GNOME
-Software will also notify you of updates and give you the option to install
-them.
+file](https://flatpak.perezdecastro.org/revolt.flatpakref) and double-click on
+it to have GNOME Software install the application. GNOME Software will also
+notify you of updates and give you the option to install them.
 
 ### Portal Helpers
 
@@ -51,7 +55,7 @@ Install the dependencies:
 sudo apt-get install python-gobject libwebkit2gtk-4.0
 ```
 
-Now you should be able to launch Riot from the GNOME Shell.
+Now you should be able to launch Revolt from the GNOME Shell.
 
 ### Upgrading
 
@@ -61,7 +65,7 @@ process can remove stray files from the old version. In general, the preferred
 way of invoking the installation script is as follows:
 
 ```sh
-sudo ./install.sh --upgrade --prefix=/usr --log-file=/etc/riot-gnome.files
+sudo ./install.sh --upgrade --prefix=/usr --log-file=/etc/revolt.files
 ```
 
 This way a log of the installed files is recorded the first time that the
@@ -77,13 +81,13 @@ repository into `.flatpak-repo`. You can create a bundle from the repository
 using:
 
 ```sh
-flatpak build-bundle .flatpak-repo/ vector-gnome.flatpak com.igalia.VectorGnome
+flatpak build-bundle .flatpak-repo/ Revolt.flatpak org.perezdecastro.Revolt
 ```
 
 Once the bundle is created, you can install and run it with:
 
 ```sh
-flatpak install --user --bundle vector-gnome.flatpak
-flatpak run com.igalia.VectorGnome
+flatpak install --user --bundle Revolt.flatpak
+flatpak run org.perezdecastro.Revolt
 ```
 

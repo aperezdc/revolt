@@ -12,7 +12,7 @@ gi.require_version('WebKit2', '4.0')
 from gi.repository import WebKit2, Gtk, GLib, Gio, Gdk
 
 
-class RiotWindow(object):
+class MainWindow(object):
     def __init__(self, app):
         self.__app = app
         self._webctx = self.__create_web_context()
@@ -35,8 +35,8 @@ class RiotWindow(object):
 
         self._window = Gtk.ApplicationWindow()
         self._window.set_titlebar(header)
-        self._window.set_title("Riot")
-        self._window.set_default_icon_name("com.igalia.VectorGnome")
+        self._window.set_title("Revolt")
+        self._window.set_default_icon_name("org.perezdecastro.Revolt")
         self.__app.add_window(self._window)
 
         self._webview = WebKit2.WebView.new_with_context(self._webctx)
@@ -93,7 +93,7 @@ class RiotWindow(object):
             self._window.set_urgency_hint(True)
             notif = Gio.Notification.new(notification.get_title())
             notif.set_body(notification.get_body())
-            notif.set_icon(Gio.ThemedIcon.new("com.igalia.VectorGnome"))
+            notif.set_icon(Gio.ThemedIcon.new("org.perezdecastro.Revolt"))
             notif.set_priority(Gio.NotificationPriority.HIGH)
             # use title as notification id:
             # allows to reuse one notification for the same conversation
@@ -132,13 +132,13 @@ class RiotWindow(object):
         return self
 
 
-class RiotApp(Gtk.Application):
+class App(Gtk.Application):
     def __init__(self, hs):
         Gtk.Application.__init__(self,
-                application_id = "com.igalia.VectorGnome",
+                application_id = "org.perezdecastro.Revolt",
                 flags = Gio.ApplicationFlags.FLAGS_NONE)
         self.homeserver = hs
-        self.riot = None
+        self.window = None
         self.connect("shutdown", self.__on_shutdown)
         self.connect("activate", self.__on_activate)
         self.connect("startup", self.__on_startup)
@@ -149,22 +149,22 @@ class RiotApp(Gtk.Application):
 
     def __on_shutdown(self, app):
         print("* App Shutdown...")
-        if self.riot is not None:
-            self.riot.finish()
+        if self.window is not None:
+            self.window.finish()
 
     def __on_activate(self, app):
         print("* App Activated...")
-        if self.riot is None:
-            self.riot = RiotWindow(self).run(self.homeserver)
-        self.riot.show()
+        if self.window is None:
+            self.window = MainWindow(self).run(self.homeserver)
+        self.window.show()
 
 
 def main():
     import sys
     gtk_settings = Gtk.Settings.get_default()
     gtk_settings.set_property("gtk-application-prefer-dark-theme", True)
-    HS = sys.argv[1] if len(sys.argv) > 1 else "https://matrix.igalia.com"
-    RiotApp(HS).run(sys.argv[2:])
+    HS = sys.argv[1] if len(sys.argv) > 1 else "https://riot.im/app/"
+    App(HS).run(sys.argv[2:])
 
 if __name__ == "__main__":
     # Honor CTRL+C http://stackoverflow.com/q/16410852
