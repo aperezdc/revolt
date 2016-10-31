@@ -161,6 +161,8 @@ class RiotApp(Gtk.Application):
 
 def main():
     import sys
+    gtk_settings = Gtk.Settings.get_default()
+    gtk_settings.set_property("gtk-application-prefer-dark-theme", True)
     HS = sys.argv[1] if len(sys.argv) > 1 else "https://matrix.igalia.com"
     RiotApp(HS).run(sys.argv[2:])
 
