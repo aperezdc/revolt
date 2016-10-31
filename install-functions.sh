@@ -170,7 +170,7 @@ install-icon () {
 
 	local t
 	for t in "${install_icon_update_themes[@]}" ; do
-		if [[ ${t} = ${theme} ]] ; then
+		if [[ ${t} = "${theme}" ]] ; then
 			return
 		fi
 	done
@@ -186,7 +186,8 @@ install-update-gtk-icon-theme-caches () {
 		install-show SKIPPED "gtk-update-icon-cache (--destdir is in use)"
 		return
 	fi
-	local updater=$(type -P gtk-update-icon-cache)
+	local updater
+	updater=$(type -P gtk-update-icon-cache)
 	if [[ -z ${updater} ]] ; then
 		install-show SKIPPED "gtk-update-icon-cache (program not found)"
 		return
