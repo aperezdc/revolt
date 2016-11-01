@@ -12,6 +12,13 @@ gi.require_version('WebKit2', '4.0')
 from gi.repository import WebKit2, Gtk, GLib, Gio, Gdk
 
 APP_ID = "org.perezdecastro.Revolt"
+APP_COMMENTS = u"Desktop application for Riot.im"
+APP_WEBSITE = u"https://github.com/aperezdc/revolt"
+APP_AUTHORS = (
+    u"Adrián Pérez de Castro <aperez@igalia.com>",
+    u"Jacobo Aragunde Pérez <jaragunde@igalia.com>",
+    u"Carlos López Pérez <clopez@igalia.com>",
+)
 
 
 def _find_resources_path():
@@ -164,10 +171,16 @@ class App(Gtk.Application):
         self.connect("activate", self.__on_activate)
         self.connect("startup", self.__on_startup)
 
+    def __action(self, name, callback):
+        action = Gio.SimpleAction.new(name)
+        action.connect("activate", callback)
+        self.add_action(action)
+
     def __on_startup(self, app):
         print("* App Startup...")
         Gtk.Settings.get_default().set_property("gtk-application-prefer-dark-theme", True)
         self.__action("quit", lambda *arg: self.quit())
+        self.__action("about", self.__on_app_about)
 
     def __on_shutdown(self, app):
         print("* App Shutdown...")
@@ -180,10 +193,18 @@ class App(Gtk.Application):
             self.window = MainWindow(self).run(self.homeserver)
         self.window.show()
 
-    def __action(self, name, callback):
-        action = Gio.SimpleAction.new(name)
-        action.connect("activate", callback)
-        self.add_action(action)
+    def __on_app_about(self, action, param):
+        dialog = Gtk.AboutDialog(
+                program_name=u"Revolt",
+                authors=APP_AUTHORS,
+                logo_icon_name=APP_ID,
+                license_type=Gtk.License.GPL_3_0,
+                comments=APP_COMMENTS,
+                website=APP_WEBSITE)
+        close_callback = lambda *arg: dialog.hide()
+        dialog.connect("delete-event", close_callback)
+        dialog.connect("response", close_callback)
+        dialog.present()
 
 
 if __name__ == "__main__":
