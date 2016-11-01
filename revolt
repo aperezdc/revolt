@@ -167,6 +167,7 @@ class App(Gtk.Application):
     def __on_startup(self, app):
         print("* App Startup...")
         Gtk.Settings.get_default().set_property("gtk-application-prefer-dark-theme", True)
+        self.__action("quit", lambda *arg: self.quit())
 
     def __on_shutdown(self, app):
         print("* App Shutdown...")
@@ -178,6 +179,11 @@ class App(Gtk.Application):
         if self.window is None:
             self.window = MainWindow(self).run(self.homeserver)
         self.window.show()
+
+    def __action(self, name, callback):
+        action = Gio.SimpleAction.new(name)
+        action.connect("activate", callback)
+        self.add_action(action)
 
 
 if __name__ == "__main__":
