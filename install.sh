@@ -13,6 +13,7 @@ install-setup "$0" "$@"
 
 install-bin revolt
 install-desktop-file "${APP_ID}.desktop"
+install-glib-gschema "${APP_ID}.gschema.xml"
 
 for size in 16 32 48 64 128 256 ; do
 	install-icon "${APP_ID}" ${size} apps assets/icon-${size}.png

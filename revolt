@@ -139,7 +139,9 @@ class App(Gtk.Application):
         Gtk.Application.__init__(self,
                 application_id = APP_ID,
                 flags = Gio.ApplicationFlags.FLAGS_NONE)
-        self.homeserver = hs
+        self.settings = Gio.Settings.new(APP_ID)
+        self.homeserver = self.settings.get_string("riot-url") if hs is None else hs
+        print("* Riot URL:", self.homeserver)
         self.window = None
         self.connect("shutdown", self.__on_shutdown)
         self.connect("activate", self.__on_activate)
@@ -161,16 +163,9 @@ class App(Gtk.Application):
         self.window.show()
 
 
-def main():
-    import sys
-    gtk_settings = Gtk.Settings.get_default()
-    gtk_settings.set_property("gtk-application-prefer-dark-theme", True)
-    HS = sys.argv[1] if len(sys.argv) > 1 else "https://riot.im/app/"
-    App(HS).run(sys.argv[2:])
-
 if __name__ == "__main__":
     # Honor CTRL+C http://stackoverflow.com/q/16410852
-    import signal
+    import signal, sys
     signal.signal(signal.SIGINT, signal.SIG_DFL)
-    main()
+    App(sys.argv[1] if len(sys.argv) else None).run(sys.argv[2:])
 

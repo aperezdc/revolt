@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schemalist>
+	<schema id="org.perezdecastro.Revolt" path="/org/perezdecastro/Revolt/">
+		<key name="riot-url" type="s">
+			<summary>Base URL of the Riot installation wrapped by Revolt</summary>
+			<default>"https://riot.im/app"</default>
+		</key>
+	</schema>
+</schemalist>
