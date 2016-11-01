@@ -16,7 +16,8 @@
     "--filesystem=xdg-pictures",
     "--own-name=org.perezdecastro.Revolt",
     "--talk-name=org.freedesktop.Notifications",
-    "--talk-name=org.gtk.Notifications"
+    "--talk-name=org.gtk.Notifications",
+    "--env=GSETTINGS_SCHEMA_DIR=/app/share/glib-2.0/schemas"
   ],
   "build-options": {
     "strip": false
