@@ -14,6 +14,7 @@ run: $(APP_ID).gresource gschemas.compiled
 	GSETTINGS_SCHEMA_DIR=$(CURDIR) __REVOLT_DEVELOPMENT=1 $(CURDIR)/revolt
 
 install:
-	SKIP_ICON_CACHE_UPDATE=1 ./install.sh --prefix='$(PREFIX)' $(if $(DESTDIR),--destdir='$(DESTDIR)')
+	SKIP_ICON_CACHE_UPDATE=1 SKIP_GSCHEMA_UPDATE=1 \
+		./install.sh --prefix='$(PREFIX)' $(if $(DESTDIR),--destdir='$(DESTDIR)')
 
 .PHONY: install run
