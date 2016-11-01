@@ -203,8 +203,45 @@ install-update-gtk-icon-theme-caches () {
 	done
 }
 
+# install-glib-gschema <filename> [install-options...]
+declare install_glib_gschema_called=false
+install-glib-gschema () {
+	install-prefixed share/glib-2.0/schemas "$@" -m644
+	install_glib_gschema_called=true
+}
+
+install-update-glib-gschemas () {
+	if ! ${install_glib_gschema_called} ; then
+		return
+	fi
+	if [[ -n ${SKIP_GSCHEMA_UPDATE} && ${SKIP_GSCHEMA_UPDATE} -ne 0 ]] ; then
+		install-show SKIPPED "glib-compile-schemas (SKIP_GSCHEMA_UPDATE)"
+		return
+	fi
+	if [[ -n ${install_destdir} ]] ; then
+		install-show SKIPPED "glib-compile-schemas (--destdir is in use)"
+		return
+	fi
+	local compiler
+	compiler=$(type -P glib-compile-schemas)
+	if [[ -z ${compiler} ]] ; then
+		install-show SKIPPED "glib-compile-schemas (program not found)"
+		return
+	fi
+	if ${install_pretend} ; then
+		echo "'${compiler}' '${install_prefix}/share/glib-2.0/schemas/'"
+	else
+		install-show EXEC "glib-compile-schemas: ${install_prefix}/share/glib-2.0/schemas/"
+		"${compiler}" "${install_prefix}/share/glib-2.0/schemas/"
+	fi
+}
+
 # install-bin <filename> [install-options...]
 # install-desktop-file <filename> [install-options...]
 install-bin () { install-prefixed bin "$@" -m755 ; }
 install-desktop-file () { install-prefixed share/applications "$@" -m644 ; }
-install-finish () { install-update-gtk-icon-theme-caches ; }
+
+install-finish () {
+	install-update-gtk-icon-theme-caches
+	install-update-glib-gschemas
+}
