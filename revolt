@@ -14,6 +14,22 @@ from gi.repository import WebKit2, Gtk, GLib, Gio, Gdk
 APP_ID = "org.perezdecastro.Revolt"
 
 
+def _find_resources_path():
+    from os import environ, path as P
+    devel = environ.get("__REVOLT_DEVELOPMENT")
+    if devel and devel.strip():
+        # Use the directory where the executable is located, most likely
+        # a checkout of the Git repository.
+        path = P.dirname(__file__)
+    else:
+        # Use an installed location: binary is in <prefix>/bin/revolt,
+        # and resources in <prefix>/share/revolt/*
+        path = P.join(P.dirname(P.dirname(__file__)), "share", "revolt")
+    location = P.abspath(P.join(path, APP_ID + ".gresource"))
+    print("* Resources:", location)
+    return location
+
+
 class MainWindow(object):
     def __init__(self, app):
         self.__app = app
@@ -136,6 +152,7 @@ class MainWindow(object):
 
 class App(Gtk.Application):
     def __init__(self, hs):
+        Gio.Resource.load(_find_resources_path())._register()
         Gtk.Application.__init__(self,
                 application_id = APP_ID,
                 flags = Gio.ApplicationFlags.FLAGS_NONE)
