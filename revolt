@@ -11,6 +11,8 @@ gi.require_version('WebKit2', '4.0')
 
 from gi.repository import WebKit2, Gtk, GLib, Gio, Gdk
 
+APP_ID = "org.perezdecastro.Revolt"
+
 
 class MainWindow(object):
     def __init__(self, app):
@@ -36,7 +38,7 @@ class MainWindow(object):
         self._window = Gtk.ApplicationWindow()
         self._window.set_titlebar(header)
         self._window.set_title("Revolt")
-        self._window.set_default_icon_name("org.perezdecastro.Revolt")
+        self._window.set_default_icon_name(APP_ID)
         self.__app.add_window(self._window)
 
         self._webview = WebKit2.WebView.new_with_context(self._webctx)
@@ -93,7 +95,7 @@ class MainWindow(object):
             self._window.set_urgency_hint(True)
             notif = Gio.Notification.new(notification.get_title())
             notif.set_body(notification.get_body())
-            notif.set_icon(Gio.ThemedIcon.new("org.perezdecastro.Revolt"))
+            notif.set_icon(Gio.ThemedIcon.new(APP_ID))
             notif.set_priority(Gio.NotificationPriority.HIGH)
             # use title as notification id:
             # allows to reuse one notification for the same conversation
@@ -135,7 +137,7 @@ class MainWindow(object):
 class App(Gtk.Application):
     def __init__(self, hs):
         Gtk.Application.__init__(self,
-                application_id = "org.perezdecastro.Revolt",
+                application_id = APP_ID,
                 flags = Gio.ApplicationFlags.FLAGS_NONE)
         self.homeserver = hs
         self.window = None
