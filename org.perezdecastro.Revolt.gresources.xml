@@ -2,6 +2,7 @@
 <gresources>
 	<gresource prefix="/org/perezdecastro/Revolt">
 		<file preprocess="xml-stripblanks" compressed="true">gtk/menus.ui</file>
+		<file preprocess="xml-stripblanks" compressed="true">gtk/preferences.ui</file>
 		<file preprocess="xml-stripblanks" compressed="true">assets/icon.svg</file>
 		<file preprocess="xml-stripblanks" compressed="true">assets/icon-symbolic.svg</file>
 	</gresource>

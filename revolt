@@ -55,6 +55,10 @@ class MainWindow(object):
         header = Gtk.HeaderBar()
         header.set_show_close_button(True)
 
+        self.__app.settings.bind("riot-url", header, "subtitle",
+                Gio.SettingsBindFlags.DEFAULT)
+        header.set_has_subtitle(True)
+
         self._spinner = Gtk.Spinner()
         header.pack_end(self._spinner)
 
@@ -62,6 +66,7 @@ class MainWindow(object):
         self._window.set_titlebar(header)
         self._window.set_title("Revolt")
         self._window.set_default_icon_name(APP_ID)
+        self._window.set_default_size(980, 650)
         self.__app.add_window(self._window)
 
         self._webview = WebKit2.WebView.new_with_context(self._webctx)
@@ -88,7 +93,7 @@ class MainWindow(object):
         if decision_type == WebKit2.PolicyDecisionType.NAVIGATION_ACTION:
             if decision.get_navigation_type() == WebKit2.NavigationType.LINK_CLICKED:
                 uri = decision.get_request().get_uri()
-                if not uri.startswith(self.homeserver):
+                if not uri.startswith(self.__app.riot_url):
                     Gtk.show_uri(uri)
                     return True
         elif decision_type == WebKit2.PolicyDecisionType.NEW_WINDOW_ACTION:
@@ -137,10 +142,8 @@ class MainWindow(object):
         self._webview.connect("show-notification", self.__on_show_notification)
         self._webview.connect("permission-request", self.__on_permission_request)
 
-    def run(self, url):
-        self.homeserver = url
-        self._window.set_default_size(900, 700)
-        self._webview.load_uri(url)
+    def load_riot(self):
+        self._webview.load_uri(self.__app.riot_url)
         return self
 
     def show(self):
@@ -158,14 +161,14 @@ class MainWindow(object):
 
 
 class App(Gtk.Application):
-    def __init__(self, hs):
+    def __init__(self):
+        Gtk.Settings.get_default().set_property("gtk-application-prefer-dark-theme", True)
         Gio.Resource.load(_find_resources_path())._register()
         Gtk.Application.__init__(self,
                 application_id = APP_ID,
                 flags = Gio.ApplicationFlags.FLAGS_NONE)
         self.settings = Gio.Settings.new(APP_ID)
-        self.homeserver = self.settings.get_string("riot-url") if hs is None else hs
-        print("* Riot URL:", self.homeserver)
+        self.riot_url = self.settings.get_string("riot-url")
         self.window = None
         self.connect("shutdown", self.__on_shutdown)
         self.connect("activate", self.__on_activate)
@@ -178,9 +181,9 @@ class App(Gtk.Application):
 
     def __on_startup(self, app):
         print("* App Startup...")
-        Gtk.Settings.get_default().set_property("gtk-application-prefer-dark-theme", True)
         self.__action("quit", lambda *arg: self.quit())
         self.__action("about", self.__on_app_about)
+        self.__action("preferences", self.__on_app_preferences)
 
     def __on_shutdown(self, app):
         print("* App Shutdown...")
@@ -190,7 +193,7 @@ class App(Gtk.Application):
     def __on_activate(self, app):
         print("* App Activated...")
         if self.window is None:
-            self.window = MainWindow(self).run(self.homeserver)
+            self.window = MainWindow(self).load_riot()
         self.window.show()
 
     def __on_app_about(self, action, param):
@@ -201,20 +204,30 @@ class App(Gtk.Application):
                 license_type=Gtk.License.GPL_3_0,
                 comments=APP_COMMENTS,
                 website=APP_WEBSITE)
-        close_callback = lambda *arg: dialog.hide()
-        dialog.connect("delete-event", close_callback)
-        dialog.connect("response", close_callback)
+        dialog.connect("response", lambda d, r: d.destroy())
         dialog.present()
+
+    def __build(self, resource, *names):
+        builder = Gtk.Builder.new_from_resource(self.get_resource_base_path() + "/" + resource)
+        return (builder.get_object(name) for name in names)
+
+    def __on_app_preferences(self, action, param):
+        window, url_entry = self.__build("gtk/preferences.ui",
+                "settings-window", "riot-url-entry")
+        url_entry.set_text(self.riot_url)
+        def on_hide(window):
+            new_url = url_entry.get_text()
+            if new_url != self.riot_url:
+                self.settings.set_string("riot-url", new_url)
+                self.riot_url = new_url
+                self.window.load_riot()
+        window.connect("hide", on_hide)
+        window.set_transient_for(self.window._window)  # XXX: Ugh.
+        window.present()
 
 
 if __name__ == "__main__":
     # Honor CTRL+C http://stackoverflow.com/q/16410852
     import signal, sys
     signal.signal(signal.SIGINT, signal.SIG_DFL)
-    args = None
-    url = None
-    if len(sys.argv) > 1:
-        url = sys.argv[1]
-        if len(sys.argv) > 2:
-            args = sys.argv[2:]
-    App(url).run(args)
+    App().run(sys.argv[1:])
