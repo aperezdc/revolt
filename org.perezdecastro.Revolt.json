@@ -12,12 +12,21 @@
     "--socket=wayland",
     "--socket=pulseaudio",
     "--socket=session-bus",
+
     "--filesystem=xdg-documents",
     "--filesystem=xdg-pictures",
+
     "--own-name=org.perezdecastro.Revolt",
+
     "--talk-name=org.freedesktop.Notifications",
     "--talk-name=org.gtk.Notifications",
-    "--env=GSETTINGS_SCHEMA_DIR=/app/share/glib-2.0/schemas"
+
+    "--env=GSETTINGS_SCHEMA_DIR=/app/share/glib-2.0/schemas",
+
+    "--filesystem=xdg-run/dconf",
+    "--filesystem=~/.config/dconf:ro",
+    "--talk-name=ca.desrt.dconf",
+    "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
   ],
   "build-options": {
     "strip": false
