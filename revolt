@@ -43,6 +43,7 @@ class MainWindow(object):
         self._webctx = self.__create_web_context()
         self.__create_widgets()
         self.__connect_widgets()
+        self.__notification_ids = set()
 
     def __create_web_context(self):
         ctx = WebKit2.WebContext.get_default()
@@ -102,9 +103,15 @@ class MainWindow(object):
                 return True
         return False
 
-    def __on_has_toplevel_focus_changed(self, window, value):
-        # Clear the window's urgency hint
-        window.set_urgency_hint(False)
+    def __on_has_toplevel_focus_changed(self, window, has_focus):
+        assert window == self._window
+        if window.has_toplevel_focus():
+            # Clear the window's urgency hint
+            window.set_urgency_hint(False)
+            # Dismiss notifications
+            for notification_id in self.__notification_ids:
+                self.__app.withdraw_notification(notification_id)
+            self.__notification_ids.clear()
 
     def __on_window_close(self, window):
         # TODO: Do cleanup here
@@ -127,7 +134,9 @@ class MainWindow(object):
             notif.set_priority(Gio.NotificationPriority.HIGH)
             # use title as notification id:
             # allows to reuse one notification for the same conversation
-            self.__app.send_notification(notification.get_title(), notif)
+            notification_id = notification.get_title()
+            self.__notification_ids.add(notification_id)
+            self.__app.send_notification(notification_id, notif)
         return True
 
     def __on_permission_request(self, webview, request):
