@@ -2,6 +2,13 @@
 <!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
+  <object class="GtkAdjustment" id="zoom-factor">
+    <property name="lower">0.75</property>
+    <property name="upper">3</property>
+    <property name="value">1</property>
+    <property name="step_increment">0.14999999999999999</property>
+    <property name="page_increment">0.25</property>
+  </object>
   <object class="GtkApplicationWindow" id="settings-window">
     <property name="can_focus">False</property>
     <property name="role">settings</property>
@@ -182,7 +189,8 @@
                                   <object class="GtkImage">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign">start</property>
+                                    <property name="halign">center</property>
+                                    <property name="valign">center</property>
                                     <property name="stock">gtk-zoom-100</property>
                                   </object>
                                 </child>
@@ -235,12 +243,5 @@
       <widget name="riot-url-entry"/>
       <widget name="zoom-factor-scale"/>
     </widgets>
-  </object>
-  <object class="GtkAdjustment" id="zoom-factor">
-    <property name="lower">0.75</property>
-    <property name="upper">3</property>
-    <property name="value">1</property>
-    <property name="step_increment">0.14999999999999999</property>
-    <property name="page_increment">0.25</property>
   </object>
 </interface>
