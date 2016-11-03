@@ -191,7 +191,7 @@
                                     <property name="can_focus">False</property>
                                     <property name="halign">center</property>
                                     <property name="valign">center</property>
-                                    <property name="stock">gtk-zoom-100</property>
+                                    <property name="icon_name">zoom-original-symbolic</property>
                                   </object>
                                 </child>
                               </object>
