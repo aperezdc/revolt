@@ -14,7 +14,16 @@ Starting with version `0.6.13` using a single command is enough (if you want to
 intall in you user directory, add `--user` to the command):
 
 ```sh
-flatpak install --from https://flatpak.perezdecastro.org/revolt
+flatpak install --from https://flatpak.perezdecastro.org/revolt.flatpakref
+```
+
+If your Flatpak version is older than 0.6.13, use the following commands
+instead:
+
+```sh
+wget https://flatpak.perezdecastro.org/revolt.flatpakref
+flatpak install --from revolt.flatpakref
+rm revolt.flatpakref
 ```
 
 Once installed, updates will be installed automatically when using `flatpak update`.
