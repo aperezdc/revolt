@@ -7,7 +7,7 @@
 		</key>
 		<key name="zoom-factor" type="d">
 			<summary>Zoom factor applied to to application</summary>
-			<range min="0.75" max="3.00"/>
+			<range min="0.75" max="2.00"/>
 			<default>1.0</default>
 		</key>
 	</schema>
