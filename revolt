@@ -9,7 +9,8 @@
 import gi
 gi.require_version('WebKit2', '4.0')
 
-from gi.repository import WebKit2, Gtk, GLib, Gio, Gdk
+from gi.repository import WebKit2, Gtk, Gio, Gdk  # noqa: E402
+
 
 APP_ID = "org.perezdecastro.Revolt"
 APP_COMMENTS = u"Desktop application for Riot.im"
@@ -67,7 +68,7 @@ class MainWindow(object):
         header.set_show_close_button(True)
 
         self.__app.settings.bind("riot-url", header, "subtitle",
-                Gio.SettingsBindFlags.DEFAULT)
+                                 Gio.SettingsBindFlags.DEFAULT)
         header.set_has_subtitle(True)
 
         self._spinner = Gtk.Spinner()
@@ -84,7 +85,7 @@ class MainWindow(object):
                                         web_context=self._webctx)
         self._webview.connect("decide-policy", self.__on_decide_policy)
         self.__app.settings.bind("zoom-factor", self._webview, "zoom-level",
-                Gio.SettingsBindFlags.DEFAULT)
+                                 Gio.SettingsBindFlags.DEFAULT)
         if hasattr(self._webview, "set_maintains_back_forward_list"):
             self._webview.set_maintains_back_forward_list(False)
         websettings = self._webview.get_settings()
@@ -186,9 +187,8 @@ class App(Gtk.Application):
     def __init__(self):
         Gtk.Settings.get_default().set_property("gtk-application-prefer-dark-theme", True)
         Gio.Resource.load(_find_resources_path())._register()
-        Gtk.Application.__init__(self,
-                application_id = APP_ID,
-                flags = Gio.ApplicationFlags.FLAGS_NONE)
+        Gtk.Application.__init__(self, application_id=APP_ID,
+                                 flags=Gio.ApplicationFlags.FLAGS_NONE)
         self.settings = Gio.Settings.new(APP_ID)
         self.riot_url = self.settings.get_string("riot-url")
         self.window = None
@@ -234,13 +234,18 @@ class App(Gtk.Application):
         return (builder.get_object(name) for name in names)
 
     def __on_app_preferences(self, action, param):
-        window, url_entry, zoom_factor, zoom_factor_reset = self.__build("gtk/preferences.ui",
-                "settings-window", "riot-url-entry", "zoom-factor", "zoom-factor-reset")
+        window, url_entry, zoom_factor, zoom_factor_reset = \
+                self.__build("gtk/preferences.ui",
+                             "settings-window",
+                             "riot-url-entry",
+                             "zoom-factor",
+                             "zoom-factor-reset")
         self.settings.bind("zoom-factor", zoom_factor, "value",
-                Gio.SettingsBindFlags.DEFAULT)
+                           Gio.SettingsBindFlags.DEFAULT)
         zoom_factor_reset.connect("clicked", lambda button:
-                self.settings.set_double("zoom-factor", 1.0))
+                                  self.settings.set_double("zoom-factor", 1.0))
         url_entry.set_text(self.riot_url)
+
         def on_hide(window):
             new_url = url_entry.get_text()
             if new_url != self.riot_url:
@@ -254,6 +259,7 @@ class App(Gtk.Application):
 
 if __name__ == "__main__":
     # Honor CTRL+C http://stackoverflow.com/q/16410852
-    import signal, sys
+    import signal
+    import sys
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     App().run(sys.argv[1:])
