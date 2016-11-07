@@ -22,4 +22,22 @@
 			</item>
 		</section>
 	</menu>
+	<menu id="status-icon-menu">
+		<section>
+			<item>
+				<attribute name="label" translatable="yes">_Riot Settings</attribute>
+				<attribute name="action">app.riot-settings</attribute>
+			</item>
+			<item>
+				<attribute name="label" translatable="yes">_Preferences</attribute>
+				<attribute name="action">app.preferences</attribute>
+			</item>
+		</section>
+		<section>
+			<item>
+				<attribute name="label" translatable="yes">_Quit</attribute>
+				<attribute name="action">app.quit</attribute>
+			</item>
+		</section>
+	</menu>
 </interface>

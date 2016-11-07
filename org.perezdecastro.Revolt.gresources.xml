@@ -5,5 +5,25 @@
 		<file preprocess="xml-stripblanks" compressed="true">gtk/preferences.ui</file>
 		<file preprocess="xml-stripblanks" compressed="true">assets/icon.svg</file>
 		<file preprocess="xml-stripblanks" compressed="true">assets/icon-symbolic.svg</file>
+
+		<file>icons/16x16/status/revolt-status-connected.png</file>
+		<file>icons/16x16/status/revolt-status-disconnected.png</file>
+		<file>icons/16x16/status/revolt-status-flip.png</file>
+		<file>icons/16x16/status/revolt-status-flop.png</file>
+
+		<file>icons/16x16@2x/status/revolt-status-connected.png</file>
+		<file>icons/16x16@2x/status/revolt-status-disconnected.png</file>
+		<file>icons/16x16@2x/status/revolt-status-flip.png</file>
+		<file>icons/16x16@2x/status/revolt-status-flop.png</file>
+
+		<file>icons/24x24/status/revolt-status-connected.png</file>
+		<file>icons/24x24/status/revolt-status-disconnected.png</file>
+		<file>icons/24x24/status/revolt-status-flip.png</file>
+		<file>icons/24x24/status/revolt-status-flop.png</file>
+
+		<file>icons/32x32/status/revolt-status-connected.png</file>
+		<file>icons/32x32/status/revolt-status-disconnected.png</file>
+		<file>icons/32x32/status/revolt-status-flip.png</file>
+		<file>icons/32x32/status/revolt-status-flop.png</file>
 	</gresource>
 </gresources>

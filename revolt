@@ -38,20 +38,18 @@ def _find_resources_path():
     return location
 
 class SysTrayStatusIcon(object):
+    ICON_STATUS_NAMES = ("connected", "disconnected", "flip", "flop")
+
     def __init__(self, app, initial_status):
-        self._status_icons = {
-                    'connected' : APP_ID + '.status.online',
-                    'disconnected' : APP_ID + '.status.offline',
-                    'flip' : APP_ID + '.status.online',
-                    'flop' : APP_ID + '.status.blink',
-                    }
         self._tooltip_text_no_notifications = "Riot IM: 0 notifications"
         self.__app = app
         self._size = 16
         self._flipflop = True
         self._blinkmilliseconds = 500
         self._icon = self.__create_icon()
-        self._contextmenu = self.__create_context_menu()
+        self._contextmenu = \
+                Gtk.Menu.new_from_model(self.__app.get_menu_by_id("status-icon-menu"))
+        self._contextmenu.insert_action_group("app", self.__app)
         self._icondata = {}
         self.__load_icons(self._size)
         self.set_status(initial_status)
@@ -67,7 +65,7 @@ class SysTrayStatusIcon(object):
         self._tooltip_text = self._tooltip_text_no_notifications
 
     def __create_icon(self):
-        icon = Gtk.StatusIcon().new()
+        icon = Gtk.StatusIcon()
         icon.set_visible(True)
         icon.set_property('has-tooltip', True)
         icon.set_property('title', 'Riot IM')
@@ -77,24 +75,11 @@ class SysTrayStatusIcon(object):
         icon.connect('size-changed', self.__on_icon_size_change)
         return icon
 
-    def __create_context_menu(self):
-        contextmenu = Gtk.Menu()
-        # Settings
-        settings = Gtk.MenuItem()
-        settings.set_label("Settings")
-        settings.connect("activate", self.__on_context_menu_settings)
-        contextmenu.append(settings)
-        # Quit
-        quit = Gtk.MenuItem()
-        quit.set_label("Quit")
-        quit.connect("activate", self.__on_context_menu_quit)
-        contextmenu.append(quit)
-        return contextmenu
-
     def __load_icons(self, size):
         self._size = size
-        for status in self._status_icons:
-            self._icondata[status] = Gtk.IconTheme.get_default().load_icon(self._status_icons[status], int(size), 0)
+        theme = Gtk.IconTheme.get_default()
+        for status in self.ICON_STATUS_NAMES:
+            self._icondata[status] = theme.load_icon("revolt-status-" + status, int(size), 0)
 
     def __draw_icon(self, status=None):
         if status is None:
@@ -107,13 +92,6 @@ class SysTrayStatusIcon(object):
         else:
             self._icon.set_from_pixbuf(self._icondata[status])
         return False
-
-    def __on_context_menu_quit(self, widget):
-        self.__app.quit()
-
-    def __on_context_menu_settings(self, widget):
-        self.__app.load_settings_page()
-        self.__app.show()
 
     def __on_left_click(self, widget):
         self.clear_notifications()
@@ -304,12 +282,10 @@ class MainWindow(object):
         return self
 
     def load_settings_page(self):
-        current_url = self._webview.get_uri()
-        if '#' in current_url:
-            settings_url = current_url.split('#',1)[0] + '#/settings'
-            self._webview.load_uri(settings_url)
-        else:
-            raise ValueError("Unknown base URL schema: %s" %current_url)
+        from urllib.parse import urlsplit, urlunsplit
+        url = list(urlsplit(self._webview.get_uri()))
+        url[-1] = "#settings"
+        self._webview.load_uri(urlunsplit(url))
 
     def show(self):
         self._window.show_all()
@@ -334,7 +310,7 @@ class App(Gtk.Application):
         self.settings = Gio.Settings.new(APP_ID)
         self.riot_url = self.settings.get_string("riot-url")
         self.window = None
-        self.statusicon = SysTrayStatusIcon(self, 'disconnected')
+        self.statusicon = None
         self.connect("shutdown", self.__on_shutdown)
         self.connect("activate", self.__on_activate)
         self.connect("startup", self.__on_startup)
@@ -346,9 +322,11 @@ class App(Gtk.Application):
 
     def __on_startup(self, app):
         print("* App Startup...")
+        self.statusicon = SysTrayStatusIcon(self, 'disconnected')
         self.__action("quit", lambda *arg: self.quit())
         self.__action("about", self.__on_app_about)
         self.__action("preferences", self.__on_app_preferences)
+        self.__action("riot-settings", self.__on__riot_settings)
 
     def __on_shutdown(self, app):
         print("* App Shutdown...")
@@ -399,7 +377,7 @@ class App(Gtk.Application):
         window.set_transient_for(self.window._window)  # XXX: Ugh.
         window.present()
 
-    def load_settings_page(self):
+    def __on__riot_settings(self, action, param):
         self.window.load_settings_page()
 
     def show(self):

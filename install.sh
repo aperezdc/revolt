@@ -22,11 +22,4 @@ done
 install-icon "${APP_ID}" scalable apps assets/icon.svg
 install-icon "${APP_ID}" symbolic apps assets/icon-symbolic.svg
 
-# systray icons (for traditional desktops like XFCE)
-for status in online offline blink; do
-	for size in 16 24 32; do
-		install-icon "${APP_ID}" ${size} apps assets/icon-${size}.status.${status}.png
-	done
-done
-
 install-finish
