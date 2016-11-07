@@ -10,3 +10,4 @@ NoDisplay=false
 StartupNotify=true
 Categories=GNOME;GTK;Network
 Terminal=false
+X-GNOME-UsesNotifications=true
