@@ -45,6 +45,26 @@ install them using your distribution's package manager:
 Some features, remarkably the desktop notifications, _will not work without the
 portal helpers_.
 
+### GNOME Runtime
+
+Revolt uses the GNOME Flatpak runtime. Depending on the version of Flatpak
+installed on your system, you may need to instal it manually. You can check
+whether the runtime is missing by trying to run Revolt in a terminal:
+
+```
+% flatpak run org.perezdecastro.Revolt
+error: runtime/org.gnome.Platform/x86_64/3.22 not installed
+%
+```
+
+If you need to install the runtime manually, you can do so by issuing the
+following commands:
+
+```sh
+wget https://sdk.gnome.org/keys/gnome-sdk.gpg
+flatpak remote-add --gpg-import=gnome-sdk.gpg gnome https://sdk.gnome.org/repo/
+flatpak install [--user] gnome org.gnome.Platform 3.22
+```
 
 Manual Installation
 -------------------
