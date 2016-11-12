@@ -5,6 +5,8 @@ Revolt is a small application which wraps [Riot](https://riot.im) to provide
 better integration with desktop environments in general, and
 [GNOME](http://www.gnome.org) in particular.
 
+![Screenshot](https://github.com/aperezdc/revolt/blob/master/assets/revolt-screenshot.png)
+
 
 Installation
 ------------
