@@ -3,7 +3,13 @@ Revolt
 
 Revolt is a small application which wraps [Riot](https://riot.im) to provide
 better integration with desktop environments in general, and
-[GNOME](http://www.gnome.org) in particular.
+[GNOME](http://www.gnome.org) in particular:
+
+* Having Riot as a “standalone” application with its own window, launcher,
+  icon, etc. instead of it living in a browser tab.
+* Persistent notifications (for desktop environments supporting them, i.e.
+  GNOME). Notifications are automatically prevented when the Revolt window is
+  focused.
 
 ![Screenshot](https://github.com/aperezdc/revolt/blob/master/assets/revolt-screenshot.png)
 
