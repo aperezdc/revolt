@@ -1,8 +1,14 @@
-include config.mk
 
 APP_ID ?= org.perezdecastro.Revolt
 
 all: $(APP_ID).gresource
+
+config.mk: configure
+	@echo '==== Running "configure" script...'
+	@./configure
+	@echo '==== Run "configure --help" for more options'
+
+-include config.mk
 
 RESOURCE_FILES := $(wildcard gtk/*.ui icon/*.svg)
 $(APP_ID).gresource: $(APP_ID).gresources.xml $(RESOURCE_FILES)
