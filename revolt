@@ -6,10 +6,10 @@
 #
 # Distributed under terms of the MIT license.
 
-import gi
+import gi, os
 gi.require_version('WebKit2', '4.0')
 
-from gi.repository import WebKit2, Gtk, GLib, Gio, Gdk
+from gi.repository import WebKit2, Gtk, GLib, Gio, Gdk, GdkPixbuf
 
 APP_ID = "org.perezdecastro.Revolt"
 APP_COMMENTS = u"Desktop application for Riot.im"
@@ -36,6 +36,136 @@ def _find_resources_path():
     print("* Resources:", location)
     return location
 
+class SysTrayStatusIcon(object):
+    def __init__(self, app, initial_status):
+        self._status_icons = {
+                    'connected' : APP_ID + '.status.online',
+                    'disconnected' : APP_ID + '.status.offline',
+                    'flip' : APP_ID + '.status.online',
+                    'flop' : APP_ID + '.status.blink',
+                    }
+        self._tooltip_text_no_notifications = "Riot IM: 0 notifications"
+        self.__app = app
+        self._size = 16
+        self._flipflop = True
+        self._blinkmilliseconds = 500
+        self._icon = self.__create_icon()
+        self._contextmenu = self.__create_context_menu()
+        self._icondata = {}
+        self.__load_icons(self._size)
+        self.set_status(initial_status)
+        self.clear_notifications()
+
+    def __add_notification_tooltip_text(self, text):
+        if self._tooltip_text == self._tooltip_text_no_notifications:
+            self._tooltip_text = ""
+        self._tooltip_text +=  text
+        self._tooltip_text +=  "\n"
+
+    def __clear_notification_tooltip_text(self):
+        self._tooltip_text = self._tooltip_text_no_notifications
+
+    def __create_icon(self):
+        icon = Gtk.StatusIcon().new()
+        icon.set_visible(True)
+        icon.set_property('has-tooltip', True)
+        icon.set_property('title', 'Riot IM')
+        icon.connect('activate', self.__on_left_click)
+        icon.connect('popup-menu', self.__on_right_click)
+        icon.connect('query-tooltip', self.__on_query_tooltip)
+        icon.connect('size-changed', self.__on_icon_size_change)
+        return icon
+
+    def __create_context_menu(self):
+        contextmenu = Gtk.Menu()
+        # Settings
+        settings = Gtk.MenuItem()
+        settings.set_label("Settings")
+        settings.connect("activate", self.__on_context_menu_settings)
+        contextmenu.append(settings)
+        # Quit
+        quit = Gtk.MenuItem()
+        quit.set_label("Quit")
+        quit.connect("activate", self.__on_context_menu_quit)
+        contextmenu.append(quit)
+        return contextmenu
+
+    def __load_icons(self, size):
+        self._size = size
+        for status in self._status_icons:
+            self._icondata[status] = Gtk.IconTheme.get_default().load_icon(self._status_icons[status], int(size), 0)
+
+    def __draw_icon(self, status=None):
+        if status is None:
+            status = self.status
+        if status == "blinking":
+            if self._flipflop:
+                self._icon.set_from_pixbuf(self._icondata["flip"])
+            else:
+                self._icon.set_from_pixbuf(self._icondata["flop"])
+        else:
+            self._icon.set_from_pixbuf(self._icondata[status])
+        return False
+
+    def __on_context_menu_quit(self, widget):
+        self.__app.quit()
+
+    def __on_context_menu_settings(self, widget):
+        self.__app.load_settings_page()
+        self.__app.show()
+
+    def __on_left_click(self, widget):
+        self.clear_notifications()
+        self.__app.show()
+
+    def __on_right_click(self, icon, button, time):
+        self._contextmenu.show_all()
+        self._contextmenu.popup(None, None, None, self._icon, button, time)
+
+    def __on_query_tooltip(self, widget, x, y, keyboard_mode, tooltip):
+        self._icon.set_tooltip_text(self._tooltip_text)
+
+    def __on_icon_size_change(self, statusicon, size):
+        if size > 31:
+            icon_size = '32'
+        elif size > 23:
+            icon_size = '24'
+        else:
+            icon_size = '16'
+        # detect KDE session. see gajim bug #5476
+        if os.environ.get('KDE_FULL_SESSION') == 'true':
+            icon_size = '32'
+        # detect MATE session.
+        if os.environ.get('MATE_DESKTOP_SESSION_ID'):
+            icon_size = '16'
+        self.__load_icons(icon_size)
+        self.__draw_icon()
+
+    def __blink(self):
+        self._flipflop = not self._flipflop
+        self.__draw_icon()
+        return self.status == "blinking"
+
+    def add_notification(self, text):
+        self.__add_notification_tooltip_text(text)
+        self.set_status("blinking")
+
+    def clear_notifications(self):
+        self.__clear_notification_tooltip_text()
+        if self.status == "blinking":
+            self.set_status("connected")
+
+    def set_status(self, status):
+        valid_status = [ "disconnected", "connected", "blinking" ]
+        if status not in valid_status:
+            raise ValueError("Status %s is not valid. Allowed values are: %s" %(status,valid_status))
+        if status == "blinking":
+            # We only want one blink callback active at a time.
+            if self.status != "blinking":
+                GLib.timeout_add(self._blinkmilliseconds, self.__blink)
+        else:
+            GLib.timeout_add(2 * self._blinkmilliseconds, self.__draw_icon, status)
+        self.status = status
 
 class MainWindow(object):
     def __init__(self, app):
@@ -125,6 +255,7 @@ class MainWindow(object):
             for notification_id in self.__notification_ids:
                 self.__app.withdraw_notification(notification_id)
             self.__notification_ids.clear()
+            self.__app.statusicon.clear_notifications()
 
     def __on_window_close(self, window):
         # TODO: Do cleanup here
@@ -134,7 +265,9 @@ class MainWindow(object):
     def __on_load_changed(self, webview, event):
         if event == WebKit2.LoadEvent.FINISHED:
             self._spinner.stop()
+            self.__app.statusicon.set_status("connected")
         else:
+            self.__app.statusicon.set_status("disconnected")
             self._spinner.start()
 
     def __on_show_notification(self, webview, notification):
@@ -150,6 +283,7 @@ class MainWindow(object):
             notification_id = notification.get_title()
             self.__notification_ids.add(notification_id)
             self.__app.send_notification(notification_id, notif)
+            self.__app.statusicon.add_notification("%s: %s" %(notification.get_title(), notification.get_body()))
         return True
 
     def __on_permission_request(self, webview, request):
@@ -167,6 +301,14 @@ class MainWindow(object):
     def load_riot(self):
         self._webview.load_uri(self.__app.riot_url)
         return self
+
+    def load_settings_page(self):
+        current_url = self._webview.get_uri()
+        if '#' in current_url:
+            settings_url = current_url.split('#',1)[0] + '#/settings'
+            self._webview.load_uri(settings_url)
+        else:
+            raise ValueError("Unknown base URL schema: %s" %current_url)
 
     def show(self):
         self._window.show_all()
@@ -192,6 +334,7 @@ class App(Gtk.Application):
         self.settings = Gio.Settings.new(APP_ID)
         self.riot_url = self.settings.get_string("riot-url")
         self.window = None
+        self.statusicon = SysTrayStatusIcon(self, 'disconnected')
         self.connect("shutdown", self.__on_shutdown)
         self.connect("activate", self.__on_activate)
         self.connect("startup", self.__on_startup)
@@ -250,6 +393,12 @@ class App(Gtk.Application):
         window.connect("hide", on_hide)
         window.set_transient_for(self.window._window)  # XXX: Ugh.
         window.present()
+
+    def load_settings_page(self):
+        self.window.load_settings_page()
+
+    def show(self):
+        self.window.show()
 
 
 if __name__ == "__main__":
