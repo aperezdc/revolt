@@ -41,6 +41,7 @@ class MainWindow(object):
     def __init__(self, app):
         self.__app = app
         self._webctx = self.__create_web_context()
+        self._contentmgr = self.__create_content_manager()
         self.__create_widgets()
         self.__connect_widgets()
         self.__notification_ids = set()
@@ -51,6 +52,15 @@ class MainWindow(object):
         ctx.set_spell_checking_enabled(False)
         ctx.set_tls_errors_policy(WebKit2.TLSErrorsPolicy.FAIL)
         return ctx
+
+    def __create_content_manager(self):
+        mgr = WebKit2.UserContentManager()
+        script = WebKit2.UserScript("Notification.requestPermission();",
+                                    WebKit2.UserContentInjectedFrames.TOP_FRAME,
+                                    WebKit2.UserScriptInjectionTime.START,
+                                    None, None)
+        mgr.add_script(script)
+        return mgr
 
     def __create_widgets(self):
         header = Gtk.HeaderBar()
@@ -70,7 +80,8 @@ class MainWindow(object):
         self._window.set_default_size(980, 650)
         self.__app.add_window(self._window)
 
-        self._webview = WebKit2.WebView.new_with_context(self._webctx)
+        self._webview = WebKit2.WebView(user_content_manager=self._contentmgr,
+                                        web_context=self._webctx)
         self._webview.connect("decide-policy", self.__on_decide_policy)
         self.__app.settings.bind("zoom-factor", self._webview, "zoom-level",
                 Gio.SettingsBindFlags.DEFAULT)
