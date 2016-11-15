@@ -109,6 +109,15 @@ This way a log of the installed files is recorded the first time that the
 installation is done, and further upgrades will use it to remove stray files
 from old versions. Also, the log file will be updated with every upgrade.
 
+
+Development
+-----------
+
+Using `make run` executes Revolt in “development” mode: the needed resources
+are loaded from the source directory, instead of using the system-wide
+directories.
+
+
 Flatpak
 -------
 
