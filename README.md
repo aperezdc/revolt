@@ -10,8 +10,11 @@ better integration with desktop environments in general, and
 * Persistent notifications (for desktop environments supporting them, i.e.
   GNOME). Notifications are automatically prevented when the Revolt window is
   focused.
+* Status icon for desktop environment which have a tray bar applet (XFCE,
+  Budgie, likely many others).
 
-![Screenshot](https://github.com/aperezdc/revolt/blob/master/assets/revolt-screenshot.png)
+![Status icon in Budgie](https://github.com/aperezdc/revolt/blob/master/assets/revolt-statusicon-screenshot.png)
+![Application Window](https://github.com/aperezdc/revolt/blob/master/assets/revolt-screenshot.png)
 
 
 Installation
