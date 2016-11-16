@@ -386,6 +386,7 @@ class App(Gtk.Application):
 
     def show(self):
         self.window.show()
+        self.window.present()
 
 
 if __name__ == "__main__":
