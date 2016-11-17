@@ -43,7 +43,7 @@ class SysTrayStatusIcon(object):
     ICON_STATUS_NAMES = ("connected", "disconnected", "flip", "flop")
 
     def __init__(self, app, initial_status):
-        self._tooltip_text_no_notifications = "Riot IM: 0 notifications"
+        self._tooltip_text_no_notifications = "Revolt: 0 notifications"
         self.__app = app
         self._size = 16
         self._flipflop = True
@@ -70,7 +70,7 @@ class SysTrayStatusIcon(object):
         icon = Gtk.StatusIcon()
         icon.set_visible(True)
         icon.set_property('has-tooltip', True)
-        icon.set_property('title', 'Riot IM')
+        icon.set_property('title', 'Revolt')
         icon.connect('activate', self.__on_left_click)
         icon.connect('popup-menu', self.__on_right_click)
         icon.connect('query-tooltip', self.__on_query_tooltip)
