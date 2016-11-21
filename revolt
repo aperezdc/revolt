@@ -10,7 +10,7 @@ import gi
 import os
 
 gi.require_version('WebKit2', '4.0')
-from gi.repository import WebKit2, Gtk, GLib, Gio, Gdk  # noqa: E402
+from gi.repository import WebKit2, Gtk, GLib, Gio, Gdk, GObject  # noqa: E402
 
 
 APP_ID = "org.perezdecastro.Revolt"
@@ -149,14 +149,55 @@ class SysTrayStatusIcon(object):
         self.status = status
 
 
-class MainWindow(object):
-    def __init__(self, app):
-        self.__app = app
-        self._webctx = self.__create_web_context()
-        self._contentmgr = self.__create_content_manager()
-        self.__create_widgets()
+class MainWindow(Gtk.ApplicationWindow):
+    network_busy = GObject.Property(type=bool, default=False)
+
+    def __init__(self, application):
+        Gtk.ApplicationWindow.__init__(self,
+                                       application=application,
+                                       default_height=980,
+                                       default_width=650,
+                                       role="main-window",
+                                       title=u"Revolt",
+                                       icon_name=application.get_application_id())
+        self.application = application
+        self.set_titlebar(self.__make_headerbar())
+        application.add_window(self)
+        self._webview = WebKit2.WebView(user_content_manager=self.__create_content_manager(),
+                                        web_context=self.__create_web_context())
+        self._webview.connect("decide-policy", self.__on_decide_policy)
+        application.settings.bind("zoom-factor", self._webview, "zoom-level",
+                                  Gio.SettingsBindFlags.DEFAULT)
+        if hasattr(self._webview, "set_maintains_back_forward_list"):
+            self._webview.set_maintains_back_forward_list(False)
+        websettings = self._webview.get_settings()
+        websettings.set_allow_file_access_from_file_urls(True)
+        websettings.set_allow_modal_dialogs(False)  # TODO
+        websettings.set_enable_fullscreen(False)
+        websettings.set_enable_java(False)
+        websettings.set_enable_media_stream(True)
+        websettings.set_enable_page_cache(False)  # Single-page app
+        websettings.set_enable_plugins(False)
+        websettings.set_enable_smooth_scrolling(True)
+        websettings.set_enable_webaudio(True)
+        websettings.set_enable_write_console_messages_to_stdout(True)
+        websettings.set_javascript_can_access_clipboard(True)
+        websettings.set_minimum_font_size(12)  # TODO: Make it a setting
+        websettings.set_property("enable-mediasource", True)
+        self._webview.show_all()
+        self.add(self._webview)
         self.__connect_widgets()
         self.__notification_ids = set()
+
+    def __make_headerbar(self):
+        header = Gtk.HeaderBar()
+        header.set_show_close_button(True)
+        spinner = Gtk.Spinner()
+        header.pack_end(spinner)
+        self.bind_property("network-busy", spinner, "active",
+                           GObject.BindingFlags.DEFAULT)
+        header.show_all()
+        return header
 
     def __create_web_context(self):
         ctx = WebKit2.WebContext.get_default()
@@ -174,52 +215,11 @@ class MainWindow(object):
         mgr.add_script(script)
         return mgr
 
-    def __create_widgets(self):
-        header = Gtk.HeaderBar()
-        header.set_show_close_button(True)
-
-        self.__app.settings.bind("riot-url", header, "subtitle",
-                                 Gio.SettingsBindFlags.DEFAULT)
-        header.set_has_subtitle(True)
-
-        self._spinner = Gtk.Spinner()
-        header.pack_end(self._spinner)
-
-        self._window = Gtk.ApplicationWindow()
-        self._window.set_titlebar(header)
-        self._window.set_title("Revolt")
-        self._window.set_default_icon_name(APP_ID)
-        self._window.set_default_size(980, 650)
-        self.__app.add_window(self._window)
-
-        self._webview = WebKit2.WebView(user_content_manager=self._contentmgr,
-                                        web_context=self._webctx)
-        self._webview.connect("decide-policy", self.__on_decide_policy)
-        self.__app.settings.bind("zoom-factor", self._webview, "zoom-level",
-                                 Gio.SettingsBindFlags.DEFAULT)
-        if hasattr(self._webview, "set_maintains_back_forward_list"):
-            self._webview.set_maintains_back_forward_list(False)
-        websettings = self._webview.get_settings()
-        websettings.set_allow_file_access_from_file_urls(True)
-        websettings.set_allow_modal_dialogs(False)  # TODO
-        websettings.set_enable_fullscreen(False)
-        websettings.set_enable_java(False)
-        websettings.set_enable_media_stream(True)
-        websettings.set_enable_page_cache(False)  # Single-page app
-        websettings.set_enable_plugins(False)
-        websettings.set_enable_smooth_scrolling(True)
-        websettings.set_enable_webaudio(True)
-        websettings.set_enable_write_console_messages_to_stdout(True)
-        websettings.set_javascript_can_access_clipboard(True)
-        websettings.set_minimum_font_size(12)  # TODO: Make it a setting
-        websettings.set_property("enable-mediasource", True)
-        self._window.add(self._webview)
-
     def __on_decide_policy(self, webview, decision, decision_type):
         if decision_type == WebKit2.PolicyDecisionType.NAVIGATION_ACTION:
             if decision.get_navigation_type() == WebKit2.NavigationType.LINK_CLICKED:
                 uri = decision.get_request().get_uri()
-                if not uri.startswith(self.__app.riot_url):
+                if not uri.startswith(self.application.riot_url):
                     Gtk.show_uri(uri)
                     return True
         elif decision_type == WebKit2.PolicyDecisionType.NEW_WINDOW_ACTION:
@@ -229,33 +229,28 @@ class MainWindow(object):
         return False
 
     def __on_has_toplevel_focus_changed(self, window, has_focus):
-        assert window == self._window
+        assert window == self
         if window.has_toplevel_focus():
             # Clear the window's urgency hint
             window.set_urgency_hint(False)
             # Dismiss notifications
             for notification_id in self.__notification_ids:
-                self.__app.withdraw_notification(notification_id)
+                self.application.withdraw_notification(notification_id)
             self.__notification_ids.clear()
-            self.__app.statusicon.clear_notifications()
-
-    def __on_window_close(self, window):
-        # TODO: Do cleanup here
-        window.hide()
-        return False
+            self.application.statusicon.clear_notifications()
 
     def __on_load_changed(self, webview, event):
         if event == WebKit2.LoadEvent.FINISHED:
-            self._spinner.stop()
-            self.__app.statusicon.set_status("connected")
+            self.network_busy = False
+            self.application.statusicon.set_status("connected")
         else:
-            self.__app.statusicon.set_status("disconnected")
-            self._spinner.start()
+            self.network_busy = True
+            self.application.statusicon.set_status("disconnected")
 
     def __on_show_notification(self, webview, notification):
         # TODO: Handle notification clicked, and so
-        if not self._window.has_toplevel_focus():
-            self._window.set_urgency_hint(True)
+        if not self.has_toplevel_focus():
+            self.set_urgency_hint(True)
             notif = Gio.Notification.new(notification.get_title())
             notif.set_body(notification.get_body())
             notif.set_icon(Gio.ThemedIcon.new(APP_ID))
@@ -264,9 +259,9 @@ class MainWindow(object):
             # allows to reuse one notification for the same conversation
             notification_id = notification.get_title()
             self.__notification_ids.add(notification_id)
-            self.__app.send_notification(notification_id, notif)
-            self.__app.statusicon.add_notification("%s: %s" % (notification.get_title(),
-                                                               notification.get_body()))
+            self.application.send_notification(notification_id, notif)
+            self.application.statusicon.add_notification("%s: %s" % (notification.get_title(),
+                                                                     notification.get_body()))
         return True
 
     def __on_permission_request(self, webview, request):
@@ -275,14 +270,13 @@ class MainWindow(object):
             return True
 
     def __connect_widgets(self):
-        self._window.connect("destroy", self.__on_window_close)
-        self._window.connect("notify::has-toplevel-focus", self.__on_has_toplevel_focus_changed)
+        self.connect("notify::has-toplevel-focus", self.__on_has_toplevel_focus_changed)
         self._webview.connect("load-changed", self.__on_load_changed)
         self._webview.connect("show-notification", self.__on_show_notification)
         self._webview.connect("permission-request", self.__on_permission_request)
 
     def load_riot(self):
-        self._webview.load_uri(self.__app.riot_url)
+        self._webview.load_uri(self.application.riot_url)
         return self
 
     def load_settings_page(self):
@@ -291,16 +285,11 @@ class MainWindow(object):
         url[-1] = "#settings"
         self._webview.load_uri(urlunsplit(url))
 
-    def show(self):
-        self._window.show_all()
-        self._window.present()
-        return self
-
     def finish(self):
         print("Finish...")
         self._webview.stop_loading()
-        self._window.hide()
-        self._window.destroy()
+        self.hide()
+        self.destroy()
         del self._webview
         return self
 
@@ -341,7 +330,7 @@ class App(Gtk.Application):
         print("* App Activated...")
         if self.window is None:
             self.window = MainWindow(self).load_riot()
-        self.window.show()
+        self.show()
 
     def __on_app_about(self, action, param):
         dialog = Gtk.AboutDialog(
@@ -378,7 +367,7 @@ class App(Gtk.Application):
                 self.riot_url = new_url
                 self.window.load_riot()
         window.connect("hide", on_hide)
-        window.set_transient_for(self.window._window)  # XXX: Ugh.
+        window.set_transient_for(self.window)
         window.present()
 
     def __on__riot_settings(self, action, param):
