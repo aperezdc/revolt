@@ -52,6 +52,7 @@ install them using your distribution's package manager:
 
 * Debian: [xdg-desktop-portal-gtk](https://packages.debian.org/search?keywords=xdg-desktop-portal-gtk).
 * Arch Linux: [xdg-desktop-portal-gtk](https://aur.archlinux.org/packages/xdg-desktop-portal-gtk/) (AUR).
+* Fedora: [xdg-desktop-portal-gtk](https://admin.fedoraproject.org/pkgdb/package/rpms/xdg-desktop-portal-gtk/).
 
 Some features, remarkably the desktop notifications, _will not work without the
 portal helpers_.
