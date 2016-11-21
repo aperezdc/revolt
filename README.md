@@ -92,7 +92,7 @@ later on using the `install.sh` script, it is recommended to use it.)
 Install the dependencies:
 
 ```sh
-sudo apt-get install python-gobject libwebkit2gtk-4.0
+sudo apt-get install python-gobject python3-gi libwebkit2gtk-4.0
 ```
 
 Now you should be able to launch Revolt from the GNOME Shell.
