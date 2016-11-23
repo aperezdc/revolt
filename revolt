@@ -158,10 +158,10 @@ class MainWindow(Gtk.ApplicationWindow):
                                        default_height=980,
                                        default_width=650,
                                        role="main-window",
-                                       title=u"Revolt",
                                        icon_name=application.get_application_id())
         self.application = application
         self.set_titlebar(self.__make_headerbar())
+        self.set_title(u"Revolt")
         application.add_window(self)
         self._webview = WebKit2.WebView(user_content_manager=self.__create_content_manager(),
                                         web_context=self.__create_web_context())
