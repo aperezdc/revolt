@@ -34,9 +34,7 @@ def _find_resources_path():
         # Use an installed location: binary is in <prefix>/bin/revolt,
         # and resources in <prefix>/share/revolt/*
         path = P.join(P.dirname(P.dirname(__file__)), "share", "revolt")
-    location = P.abspath(P.join(path, APP_ID + ".gresource"))
-    print("* Resources:", location)
-    return location
+    return P.abspath(P.join(path, APP_ID + ".gresource"))
 
 
 class SysTrayStatusIcon(object):
@@ -303,7 +301,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self._webview.load_uri(urlunsplit(url))
 
     def finish(self):
-        print("Finish...")
+        # TODO: Most likely this can be moved to do_destroy()
         self._webview.stop_loading()
         self.hide()
         self.destroy()
@@ -331,7 +329,6 @@ class App(Gtk.Application):
         self.add_action(action)
 
     def __on_startup(self, app):
-        print("* App Startup...")
         self.statusicon = SysTrayStatusIcon(self, 'disconnected')
         self.__action("quit", lambda *arg: self.quit())
         self.__action("about", self.__on_app_about)
@@ -339,12 +336,10 @@ class App(Gtk.Application):
         self.__action("riot-settings", self.__on__riot_settings)
 
     def __on_shutdown(self, app):
-        print("* App Shutdown...")
         if self.window is not None:
             self.window.finish()
 
     def __on_activate(self, app):
-        print("* App Activated...")
         if self.window is None:
             saved_state_path = self.settings.get_property("path")
             saved_state_path += "saved-state/main-window/"
