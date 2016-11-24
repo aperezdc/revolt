@@ -371,6 +371,7 @@ class App(Gtk.Application):
         window.present()
 
     def __on__riot_settings(self, action, param):
+        self.show()
         self.window.load_settings_page()
 
     def show(self):
