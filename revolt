@@ -50,7 +50,7 @@ class SysTrayStatusIcon(object):
         self._blinkmilliseconds = 500
         self._icon = self.__create_icon()
         self._contextmenu = \
-            Gtk.Menu.new_from_model(self.__app.get_menu_by_id("status-icon-menu"))
+            Gtk.Menu.new_from_model(self.__app.get_menu_by_id("app-menu"))
         self._contextmenu.insert_action_group("app", self.__app)
         self._icondata = {}
         self.__load_icons(self._size)
