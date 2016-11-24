@@ -354,13 +354,13 @@ class App(Gtk.Application):
         self.show()
 
     def __on_app_about(self, action, param):
-        dialog = Gtk.AboutDialog(
-                program_name=u"Revolt",
-                authors=APP_AUTHORS,
-                logo_icon_name=APP_ID,
-                license_type=Gtk.License.GPL_3_0,
-                comments=APP_COMMENTS,
-                website=APP_WEBSITE)
+        dialog = Gtk.AboutDialog(transient_for=self.window,
+                                 program_name=u"Revolt",
+                                 authors=APP_AUTHORS,
+                                 logo_icon_name=APP_ID,
+                                 license_type=Gtk.License.GPL_3_0,
+                                 comments=APP_COMMENTS,
+                                 website=APP_WEBSITE)
         dialog.connect("response", lambda d, r: d.destroy())
         dialog.present()
 
