@@ -171,6 +171,9 @@ class MainWindow(Gtk.ApplicationWindow):
         if hasattr(self._webview, "set_maintains_back_forward_list"):
             self._webview.set_maintains_back_forward_list(False)
         websettings = self._webview.get_settings()
+        application.settings.bind("enable-developer-tools", websettings,
+                                  "enable-developer-extras",
+                                  Gio.SettingsBindFlags.DEFAULT)
         websettings.set_allow_file_access_from_file_urls(True)
         websettings.set_allow_modal_dialogs(False)  # TODO
         websettings.set_enable_fullscreen(False)
@@ -348,13 +351,16 @@ class App(Gtk.Application):
         return (builder.get_object(name) for name in names)
 
     def __on_app_preferences(self, action, param):
-        window, url_entry, zoom_factor, zoom_factor_reset = \
+        window, url_entry, zoom_factor, zoom_factor_reset, devtools_toggle = \
                 self.__build("gtk/preferences.ui",
                              "settings-window",
                              "riot-url-entry",
                              "zoom-factor",
-                             "zoom-factor-reset")
+                             "zoom-factor-reset",
+                             "dev-tools-toggle")
         self.settings.bind("zoom-factor", zoom_factor, "value",
+                           Gio.SettingsBindFlags.DEFAULT)
+        self.settings.bind("enable-developer-tools", devtools_toggle, "active",
                            Gio.SettingsBindFlags.DEFAULT)
         zoom_factor_reset.connect("clicked", lambda button:
                                   self.settings.set_double("zoom-factor", 1.0))

@@ -10,5 +10,9 @@
 			<range min="0.75" max="2.00"/>
 			<default>1.0</default>
 		</key>
+		<key name="enable-developer-tools" type="b">
+			<summary>Allow usage of the web inspector and JavaScript console</summary>
+			<default>false</default>
+		</key>
 	</schema>
 </schemalist>
