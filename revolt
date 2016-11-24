@@ -167,16 +167,16 @@ class MainWindow(Gtk.ApplicationWindow):
                                         web_context=self.__create_web_context())
         self._webview.connect("decide-policy", self.__on_decide_policy)
         application.settings.bind("zoom-factor", self._webview, "zoom-level",
-                                  Gio.SettingsBindFlags.DEFAULT)
+                                  Gio.SettingsBindFlags.GET)
         if hasattr(self._webview, "set_maintains_back_forward_list"):
             self._webview.set_maintains_back_forward_list(False)
         websettings = self._webview.get_settings()
         application.settings.bind("enable-developer-tools", websettings,
                                   "enable-developer-extras",
-                                  Gio.SettingsBindFlags.DEFAULT)
+                                  Gio.SettingsBindFlags.GET)
         application.settings.bind("enable-developer-tools", websettings,
                                   "enable-write-console-messages-to-stdout",
-                                  Gio.SettingsBindFlags.DEFAULT)
+                                  Gio.SettingsBindFlags.GET)
         websettings.set_allow_file_access_from_file_urls(True)
         websettings.set_allow_modal_dialogs(False)  # TODO
         websettings.set_enable_fullscreen(False)
