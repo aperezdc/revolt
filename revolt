@@ -174,6 +174,9 @@ class MainWindow(Gtk.ApplicationWindow):
         application.settings.bind("enable-developer-tools", websettings,
                                   "enable-developer-extras",
                                   Gio.SettingsBindFlags.DEFAULT)
+        application.settings.bind("enable-developer-tools", websettings,
+                                  "enable-write-console-messages-to-stdout",
+                                  Gio.SettingsBindFlags.DEFAULT)
         websettings.set_allow_file_access_from_file_urls(True)
         websettings.set_allow_modal_dialogs(False)  # TODO
         websettings.set_enable_fullscreen(False)
@@ -183,7 +186,6 @@ class MainWindow(Gtk.ApplicationWindow):
         websettings.set_enable_plugins(False)
         websettings.set_enable_smooth_scrolling(True)
         websettings.set_enable_webaudio(True)
-        websettings.set_enable_write_console_messages_to_stdout(True)
         websettings.set_javascript_can_access_clipboard(True)
         websettings.set_minimum_font_size(12)  # TODO: Make it a setting
         websettings.set_property("enable-mediasource", True)
