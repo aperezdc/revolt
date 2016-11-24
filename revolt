@@ -152,14 +152,19 @@ class SysTrayStatusIcon(object):
 class MainWindow(Gtk.ApplicationWindow):
     network_busy = GObject.Property(type=bool, default=False)
 
-    def __init__(self, application):
+    def __init__(self, application, saved_state):
+        self.application = application
+        self.saved_state = saved_state
         Gtk.ApplicationWindow.__init__(self,
                                        application=application,
-                                       default_height=980,
-                                       default_width=650,
                                        role="main-window",
+                                       default_width=saved_state.get_uint("width"),
+                                       default_height=saved_state.get_uint("height"),
                                        icon_name=application.get_application_id())
-        self.application = application
+        if self.saved_state.get_boolean("maximized"):
+            self.maximize()
+        self.saved_state.bind("maximized", self, "is-maximized", Gio.SettingsBindFlags.SET)
+
         self.set_titlebar(self.__make_headerbar())
         self.set_title(u"Revolt")
         application.add_window(self)
@@ -193,6 +198,13 @@ class MainWindow(Gtk.ApplicationWindow):
         self.add(self._webview)
         self.__connect_widgets()
         self.__notification_ids = set()
+
+    def do_configure_event(self, event):
+        result = Gtk.ApplicationWindow.do_configure_event(self, event)
+        width, height = self.get_size()
+        self.saved_state.set_uint("width", width)
+        self.saved_state.set_uint("height", height)
+        return result
 
     def __make_headerbar(self):
         header = Gtk.HeaderBar()
@@ -305,7 +317,7 @@ class App(Gtk.Application):
         Gio.Resource.load(_find_resources_path())._register()
         Gtk.Application.__init__(self, application_id=APP_ID,
                                  flags=Gio.ApplicationFlags.FLAGS_NONE)
-        self.settings = Gio.Settings.new(APP_ID)
+        self.settings = Gio.Settings(schema_id=APP_ID)
         self.riot_url = self.settings.get_string("riot-url")
         self.window = None
         self.statusicon = None
@@ -334,7 +346,11 @@ class App(Gtk.Application):
     def __on_activate(self, app):
         print("* App Activated...")
         if self.window is None:
-            self.window = MainWindow(self).load_riot()
+            saved_state_path = self.settings.get_property("path")
+            saved_state_path += "saved-state/main-window/"
+            saved_state = Gio.Settings(schema_id=APP_ID + ".WindowState",
+                                       path=saved_state_path)
+            self.window = MainWindow(self, saved_state).load_riot()
         self.show()
 
     def __on_app_about(self, action, param):

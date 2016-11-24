@@ -15,4 +15,19 @@
 			<default>false</default>
 		</key>
 	</schema>
+
+	<schema id="org.perezdecastro.Revolt.WindowState">
+		<key name="width" type="u">
+			<summary>Width of the window</summary>
+			<default>900</default>
+		</key>
+		<key name="height" type="u">
+			<summary>Height of the window</summary>
+			<default>650</default>
+		</key>
+		<key name="maximized" type="b">
+			<summary>Whether the window is maximized</summary>
+			<default>false</default>
+		</key>
+	</schema>
 </schemalist>
