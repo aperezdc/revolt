@@ -2,10 +2,6 @@
 <interface>
 	<menu id="app-menu">
 		<section>
-			<item>
-				<attribute name="label" translatable="yes">_About</attribute>
-				<attribute name="action">app.about</attribute>
-			</item>
 		</section>
 		<section>
 			<item>
@@ -13,18 +9,20 @@
 				<attribute name="action">app.preferences</attribute>
 				<attribute name="accel"><![CDATA[<Control>e]]></attribute>
 			</item>
-		</section>
-		<section>
 			<item>
-				<attribute name="label" translatable="yes">_Quit</attribute>
-				<attribute name="action">app.quit</attribute>
-				<attribute name="accel"><![CDATA[<Control>q]]></attribute>
+				<attribute name="label" translatable="yes">_Riot Settings</attribute>
+				<attribute name="action">app.riot-settings</attribute>
 			</item>
 		</section>
 		<section>
 			<item>
-				<attribute name="label" translatable="yes">_Riot Settings</attribute>
-				<attribute name="action">app.riot-settings</attribute>
+				<attribute name="label" translatable="yes">_About</attribute>
+				<attribute name="action">app.about</attribute>
+			</item>
+			<item>
+				<attribute name="label" translatable="yes">_Quit</attribute>
+				<attribute name="action">app.quit</attribute>
+				<attribute name="accel"><![CDATA[<Control>q]]></attribute>
 			</item>
 		</section>
 	</menu>
