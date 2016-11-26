@@ -155,16 +155,9 @@ install-icon () {
 	local ext=${4#*.}
 	local theme=${5:-hicolor}
 
-	case ${size} in
-	   scalable)
-	      ;; # Nothing
-	   symbolic)
-	      name="${name}-symbolic"
-	      ;;
-	   *)
-	      size="${size}x${size}"
-	      ;;
-	esac
+	if [[ ${size} = symbolic ]] ; then
+	   name="${name}-symbolic"
+	fi
 
 	install-exec "$4" "${install_prefix}/share/icons/${theme}/${size}/$3/${name}.${ext}" -m644
 

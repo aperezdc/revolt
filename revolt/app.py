@@ -75,7 +75,7 @@ class RevoltApp(Gtk.Application):
         dialog = Gtk.AboutDialog(transient_for=self.window,
                                  program_name=u"Revolt",
                                  authors=APP_AUTHORS,
-                                 logo_icon_name=APP_ID,
+                                 logo_icon_name="revolt-about",
                                  license_type=Gtk.License.GPL_3_0,
                                  comments=APP_COMMENTS,
                                  website=APP_WEBSITE)

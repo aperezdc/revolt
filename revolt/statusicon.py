@@ -11,7 +11,12 @@ import os
 
 
 class SysTrayStatusIcon(object):
-    ICON_STATUS_NAMES = ("connected", "disconnected", "flip", "flop")
+    ICON_STATUS_NAMES = {
+        "disconnected": "",
+        "connected": "-status-online",
+        "flip": "-status-blink",
+        "flop": ""
+    }
 
     def __init__(self, app, initial_status):
         self._tooltip_text_no_notifications = "Revolt: 0 notifications"
@@ -51,8 +56,11 @@ class SysTrayStatusIcon(object):
     def __load_icons(self, size):
         self._size = size
         theme = Gtk.IconTheme.get_default()
-        for status in self.ICON_STATUS_NAMES:
-            self._icondata[status] = theme.load_icon("revolt-status-" + status, int(size), 0)
+        for status, icon_suffix in self.ICON_STATUS_NAMES.items():
+            icon_name = "revolt" + icon_suffix + "-symbolic"
+            self._icondata[status] = theme.load_icon(icon_name, int(size),
+                                                     Gtk.IconLookupFlags.FORCE_SVG |
+                                                     Gtk.IconLookupFlags.FORCE_SYMBOLIC)
 
     def __draw_icon(self, status=None):
         if status is None:

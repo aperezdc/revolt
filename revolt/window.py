@@ -17,10 +17,10 @@ class MainWindow(Gtk.ApplicationWindow):
         self.saved_state = saved_state
         Gtk.ApplicationWindow.__init__(self,
                                        application=application,
+                                       icon_name="revolt",
                                        role="main-window",
                                        default_width=saved_state.get_uint("width"),
-                                       default_height=saved_state.get_uint("height"),
-                                       icon_name=application.get_application_id())
+                                       default_height=saved_state.get_uint("height"))
         if self.saved_state.get_boolean("maximized"):
             self.maximize()
         self.saved_state.bind("maximized", self, "is-maximized", Gio.SettingsBindFlags.SET)
@@ -131,7 +131,7 @@ class MainWindow(Gtk.ApplicationWindow):
             notif = Gio.Notification.new(notification.get_title())
             notif.set_body(notification.get_body())
             # TODO: Use the avatar of the contact, if available.
-            notif.set_icon(Gio.ThemedIcon.new(self.application.get_application_id()))
+            notif.set_icon(Gio.ThemedIcon.new("revolt"))
             notif.set_priority(Gio.NotificationPriority.HIGH)
             # use title as notification id:
             # allows to reuse one notification for the same conversation
