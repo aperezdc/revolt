@@ -22,6 +22,6 @@ run: $(APP_ID).gresource gschemas.compiled
 
 install:
 	SKIP_ICON_CACHE_UPDATE=1 ./install.sh --prefix='$(PREFIX)' $(if $(DESTDIR),--destdir='$(DESTDIR)')
-	python3 -m compileall $(if $(DESTDIR),-d '$(DESTDIR)') $(DESTDIR)$(PREFIX)/share/revolt/*.py
+	python3 -m compileall $(if $(DESTDIR),-d '$(DESTDIR)') $(DESTDIR)$(PREFIX)/share/revolt/py/revolt/*.py
 
 .PHONY: install run

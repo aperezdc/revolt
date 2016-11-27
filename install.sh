@@ -17,7 +17,7 @@ install-glib-gschema "${APP_ID}.gschema.xml"
 install-prefixed share/revolt "${APP_ID}.gresource" -m644
 
 for file in revolt/*.py ; do
-	install-prefixed share/revolt "${file}" -m644
+	install-prefixed share/revolt/py/revolt "${file}" -m644
 done
 
 for size in 16x16 16x16@2x 24x24 24x24@2x 32x32 64x64 ; do
