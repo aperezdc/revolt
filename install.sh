@@ -5,6 +5,8 @@
 #
 # Distributed under terms of the MIT license.
 #
+set -e
+shopt -s nullglob
 
 declare -r APP_ID='org.perezdecastro.Revolt'
 
@@ -13,8 +15,12 @@ install-setup "$0" "$@"
 
 install-bin bin/revolt
 install-desktop-file "${APP_ID}.desktop"
-install-glib-gschema "${APP_ID}.gschema.xml"
 install-prefixed share/revolt "${APP_ID}.gresource" -m644
+
+install-glib-gschema "${APP_ID}.gschema.xml"
+for file in ./[0-9][0-9]_${APP_ID}.gschema.override ; do
+	install-glib-gschema "${file}"
+done
 
 for file in revolt/*.py ; do
 	install-prefixed share/revolt/py/revolt "${file}" -m644
