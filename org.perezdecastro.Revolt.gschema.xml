@@ -14,6 +14,12 @@
 			<summary>Allow usage of the web inspector and JavaScript console</summary>
 			<default>false</default>
 		</key>
+
+		<child name="saved-state" schema="org.perezdecastro.Revolt.State"/>
+	</schema>
+
+	<schema id="org.perezdecastro.Revolt.State">
+		<child name="main-window" schema="org.perezdecastro.Revolt.WindowState"/>
 	</schema>
 
 	<schema id="org.perezdecastro.Revolt.WindowState">
