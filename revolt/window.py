@@ -6,7 +6,8 @@
 #
 # Distributed under terms of the GPLv3 license.
 
-from gi.repository import Gtk, Gdk, Gio, WebKit2, GObject
+from gi.repository import GLib, Gtk, Gdk, Gio, WebKit2, GObject
+from .util import cachedproperty
 
 
 class MainWindow(Gtk.ApplicationWindow):
@@ -28,8 +29,8 @@ class MainWindow(Gtk.ApplicationWindow):
         self.set_titlebar(self.__make_headerbar())
         self.set_title(u"Revolt")
         application.add_window(self)
-        self._webview = WebKit2.WebView(user_content_manager=self.__create_content_manager(),
-                                        web_context=self.__create_web_context())
+        self._webview = WebKit2.WebView(user_content_manager=self._user_content_manager,
+                                        web_context=self._web_context)
         self._webview.connect("decide-policy", self.__on_decide_policy)
         application.settings.bind("zoom-factor", self._webview, "zoom-level",
                                   Gio.SettingsBindFlags.GET)
@@ -76,14 +77,27 @@ class MainWindow(Gtk.ApplicationWindow):
         header.show_all()
         return header
 
-    def __create_web_context(self):
-        ctx = WebKit2.WebContext.get_default()
+    @cachedproperty
+    def _website_data_manager(self):
+        from os import path as P
+        print("Creating WebsiteDataManager...")
+        app_id = self.application.get_application_id()
+        cache_dir = P.join(GLib.get_user_cache_dir(), "revolt", app_id)
+        data_dir = P.join(GLib.get_user_data_dir(), "revolt", app_id)
+        return WebKit2.WebsiteDataManager(base_cache_directory=cache_dir,
+                                          base_data_directory=data_dir)
+
+    @cachedproperty
+    def _web_context(self):
+        print("Creating WebContext...")
+        ctx = WebKit2.WebContext(website_data_manager=self._website_data_manager)
         ctx.set_web_process_count_limit(1)
         ctx.set_spell_checking_enabled(False)
         ctx.set_tls_errors_policy(WebKit2.TLSErrorsPolicy.FAIL)
         return ctx
 
-    def __create_content_manager(self):
+    @cachedproperty
+    def _user_content_manager(self):
         mgr = WebKit2.UserContentManager()
         script = WebKit2.UserScript("Notification.requestPermission();",
                                     WebKit2.UserContentInjectedFrames.TOP_FRAME,
