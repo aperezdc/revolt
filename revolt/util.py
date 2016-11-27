@@ -6,6 +6,7 @@
 #
 # Distributed under terms of the GPv3 license.
 
+
 class CachedProperty(object):
     __slots__ = ("value", "get_value")
 
