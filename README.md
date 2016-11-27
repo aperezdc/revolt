@@ -1,3 +1,5 @@
+![Logo](https://github.com/aperezdc/revolt/blob/master/assets/revolt-logo.png)
+
 Revolt
 ======
 
