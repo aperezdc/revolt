@@ -1,1 +1,1 @@
-autocmd FileType python setlocal makeprg=flake8
+set makeprg=flake8
