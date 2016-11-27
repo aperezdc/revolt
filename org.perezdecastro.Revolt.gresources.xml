@@ -3,27 +3,6 @@
 	<gresource prefix="/org/perezdecastro/Revolt">
 		<file preprocess="xml-stripblanks" compressed="true">gtk/menus.ui</file>
 		<file preprocess="xml-stripblanks" compressed="true">gtk/preferences.ui</file>
-
-		<file>icons/16x16/status/revolt-status-connected.png</file>
-		<file>icons/16x16/status/revolt-status-disconnected.png</file>
-		<file>icons/16x16/status/revolt-status-flip.png</file>
-		<file>icons/16x16/status/revolt-status-flop.png</file>
-
-		<file>icons/16x16@2x/status/revolt-status-connected.png</file>
-		<file>icons/16x16@2x/status/revolt-status-disconnected.png</file>
-		<file>icons/16x16@2x/status/revolt-status-flip.png</file>
-		<file>icons/16x16@2x/status/revolt-status-flop.png</file>
-
-		<file>icons/24x24/status/revolt-status-connected.png</file>
-		<file>icons/24x24/status/revolt-status-disconnected.png</file>
-		<file>icons/24x24/status/revolt-status-flip.png</file>
-		<file>icons/24x24/status/revolt-status-flop.png</file>
-
-		<file>icons/32x32/status/revolt-status-connected.png</file>
-		<file>icons/32x32/status/revolt-status-disconnected.png</file>
-		<file>icons/32x32/status/revolt-status-flip.png</file>
-		<file>icons/32x32/status/revolt-status-flop.png</file>
-
 		<file preprocess="xml-stripblanks" compressed="true">icons/revolt-about.svg</file>
 		<file preprocess="xml-stripblanks" compressed="true">icons/scalable/apps/revolt.svg</file>
 		<file preprocess="xml-stripblanks" compressed="true">icons/scalable/apps/revolt-symbolic.svg</file>
