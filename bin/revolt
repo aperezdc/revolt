@@ -15,7 +15,7 @@ def adjust_import_path():
         sys.path.insert(0, P.dirname(P.dirname(__file__)))
     else:
         sys.path.insert(0, P.join(P.dirname(P.dirname(__file__)),
-                                  "usr", "share", "revolt"))
+                                  "share", "revolt"))
 
 
 if __name__ == "__main__":
