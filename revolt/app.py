@@ -6,11 +6,14 @@
 #
 # Distributed under terms of the GPLv3 license.
 
+from os import environ
 from gi.repository import Gtk, Gio
 from .statusicon import SysTrayStatusIcon
 from .window import MainWindow
 
-APP_ID = "org.perezdecastro.Revolt"
+DEFAULT_APP_ID = "org.perezdecastro.Revolt"
+APP_ID = environ.get("REVOLT_OVERRIDE_APPLICATION_ID", DEFAULT_APP_ID).strip()
+
 APP_COMMENTS = u"Desktop application for Riot.im"
 APP_WEBSITE = u"https://github.com/aperezdc/revolt"
 APP_AUTHORS = (u"Adrián Pérez de Castro <aperez@igalia.com>",
@@ -19,7 +22,7 @@ APP_AUTHORS = (u"Adrián Pérez de Castro <aperez@igalia.com>",
 
 
 def _find_resources_path(program_path):
-    from os import environ, path as P
+    from os import path as P
     devel = environ.get("__REVOLT_DEVELOPMENT")
     if devel and devel.strip():
         # Use the directory where the executable is located, most likely
@@ -29,15 +32,17 @@ def _find_resources_path(program_path):
         # Use an installed location: binary is in <prefix>/bin/revolt,
         # and resources in <prefix>/share/revolt/*
         path = P.join(P.dirname(P.dirname(program_path)), "share", "revolt")
-    return P.abspath(P.join(path, APP_ID + ".gresource"))
+    return P.abspath(P.join(path, DEFAULT_APP_ID + ".gresource"))
 
 
 class RevoltApp(Gtk.Application):
     def __init__(self, program_path):
         Gio.Resource.load(_find_resources_path(program_path))._register()
         Gtk.Application.__init__(self, application_id=APP_ID,
+                                 resource_base_path="/" + DEFAULT_APP_ID.replace(".", "/"),
                                  flags=Gio.ApplicationFlags.FLAGS_NONE)
-        self.settings = Gio.Settings(schema_id=APP_ID)
+        self.settings = Gio.Settings(schema_id=DEFAULT_APP_ID,
+                                     path="/" + APP_ID.replace(".", "/") + "/")
         self.riot_url = self.settings.get_string("riot-url")
         self.window = None
         self.statusicon = None
@@ -68,7 +73,7 @@ class RevoltApp(Gtk.Application):
         if self.window is None:
             saved_state_path = self.settings.get_property("path")
             saved_state_path += "saved-state/main-window/"
-            saved_state = Gio.Settings(schema_id=APP_ID + ".WindowState",
+            saved_state = Gio.Settings(schema_id=DEFAULT_APP_ID + ".WindowState",
                                        path=saved_state_path)
             self.window = MainWindow(self, saved_state).load_riot()
         self.show()
