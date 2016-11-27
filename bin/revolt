@@ -12,7 +12,10 @@ def adjust_import_path():
     devel = environ.get("__REVOLT_DEVELOPMENT")
     if devel and devel.strip():
         # Prepend source directory path.
-        sys.path.insert(0, P.join(P.dirname(P.dirname(__file__))))
+        sys.path.insert(0, P.dirname(P.dirname(__file__)))
+    else:
+        sys.path.insert(0, P.join(P.dirname(P.dirname(__file__)),
+                                  "usr", "share", "revolt"))
 
 
 if __name__ == "__main__":
