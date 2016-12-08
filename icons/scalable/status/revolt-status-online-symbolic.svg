@@ -15,7 +15,7 @@
    id="svg4154"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="org.perezdecastro.Revolt-online-symbolic.svg"
+   sodipodi:docname="revolt-status-online-symbolic.svg"
    inkscape:export-filename="/home/aperez/devel/revolt/icons/64x64/apps/org.perezdecastro.Revolt.png"
    inkscape:export-xdpi="180"
    inkscape:export-ydpi="180">
@@ -64,7 +64,7 @@
      transform="translate(0,-1036.3622)"
      style="display:inline">
     <path
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#cccccc;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#bebebe;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        d="M 5 1 A 4 4 0 0 0 1 5 A 4 4 0 0 0 1.21875 6.2910156 A 7 7 0 0 0 1 8 A 7 7 0 0 0 8 15 A 7 7 0 0 0 15 8 A 7 7 0 0 0 8 1 A 7 7 0 0 0 6.2949219 1.21875 A 4 4 0 0 0 5 1 z M 8 2 A 6 6 0 0 1 14 8 A 6 6 0 0 1 8 14 A 6 6 0 0 1 2 8 A 6 6 0 0 1 2.0175781 7.65625 A 4 4 0 0 0 2.5097656 8.1230469 A 1 1 0 0 0 3.5 9 A 1 1 0 0 0 3.9960938 8.8671875 A 4 4 0 0 0 5 9 A 4 4 0 0 0 5.1738281 8.9941406 A 3 3 0 0 0 8 11 A 3 3 0 0 0 11 8 A 3 3 0 0 0 8.9921875 5.171875 A 4 4 0 0 0 9 5 A 4 4 0 0 0 8.8671875 3.9941406 A 1 1 0 0 0 9 3.5 A 1 1 0 0 0 8.1289062 2.5097656 A 4 4 0 0 0 7.6523438 2.0136719 A 6 6 0 0 1 8 2 z M 11.197266 3.8183594 A 1 1 0 0 0 10.474609 4.1113281 A 1 1 0 0 0 10.474609 5.5253906 A 1 1 0 0 0 11.888672 5.5253906 A 1 1 0 0 0 11.888672 4.1113281 A 1 1 0 0 0 11.197266 3.8183594 z M 12.5 7 A 1 1 0 0 0 11.5 8 A 1 1 0 0 0 12.5 9 A 1 1 0 0 0 13.5 8 A 1 1 0 0 0 12.5 7 z M 4.8320312 10.181641 A 1 1 0 0 0 4.1113281 10.474609 A 1 1 0 0 0 4.1113281 11.888672 A 1 1 0 0 0 5.5253906 11.888672 A 1 1 0 0 0 5.5253906 10.474609 A 1 1 0 0 0 4.8320312 10.181641 z M 11.197266 10.181641 A 1 1 0 0 0 10.474609 10.474609 A 1 1 0 0 0 10.474609 11.888672 A 1 1 0 0 0 11.888672 11.888672 A 1 1 0 0 0 11.888672 10.474609 A 1 1 0 0 0 11.197266 10.181641 z M 8 11.5 A 1 1 0 0 0 7 12.5 A 1 1 0 0 0 8 13.5 A 1 1 0 0 0 9 12.5 A 1 1 0 0 0 8 11.5 z "
        transform="translate(0,1036.3622)"
        id="path4207" />
