@@ -7,6 +7,7 @@
 # Distributed under terms of the GPLv3 license.
 
 from gi.repository import Gtk, GLib
+from .util import cachedproperty
 import os
 
 
@@ -25,13 +26,21 @@ class SysTrayStatusIcon(object):
         self._flipflop = True
         self._blinkmilliseconds = 500
         self._icon = self.__create_icon()
-        self._contextmenu = \
-            Gtk.Menu.new_from_model(self.__app.get_menu_by_id("app-menu"))
         self._contextmenu.insert_action_group("app", self.__app)
         self._icondata = {}
         self.__load_icons(self._size)
         self.set_status(initial_status)
         self.clear_notifications()
+
+    @cachedproperty
+    def _contextmenu(self):
+        model = self.__app.get_menu_by_id("app-menu")
+        if model is None:
+            # If showing the application menu in the GNOME Shell top bar is
+            # disabled, then GtkApplication won't load gtk/menus-appmenu.ui
+            # automatically, but we still need it for the context menu.
+            (model,) = self.__app._build("gtk/menus-appmenu.ui", "app-menu")
+        return Gtk.Menu.new_from_model(model)
 
     def __add_notification_tooltip_text(self, text):
         if self._tooltip_text == self._tooltip_text_no_notifications:

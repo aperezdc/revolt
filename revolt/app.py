@@ -90,18 +90,18 @@ class RevoltApp(Gtk.Application):
         dialog.connect("response", lambda d, r: d.destroy())
         dialog.present()
 
-    def __build(self, resource, *names):
+    def _build(self, resource, *names):
         builder = Gtk.Builder.new_from_resource(self.get_resource_base_path() + "/" + resource)
         return (builder.get_object(name) for name in names)
 
     def __on_app_preferences(self, action, param):
         window, url_entry, zoom_factor, zoom_factor_reset, devtools_toggle = \
-                self.__build("gtk/preferences.ui",
-                             "settings-window",
-                             "riot-url-entry",
-                             "zoom-factor",
-                             "zoom-factor-reset",
-                             "dev-tools-toggle")
+                self._build("gtk/preferences.ui",
+                            "settings-window",
+                            "riot-url-entry",
+                            "zoom-factor",
+                            "zoom-factor-reset",
+                            "dev-tools-toggle")
         self.settings.bind("zoom-factor", zoom_factor, "value",
                            Gio.SettingsBindFlags.DEFAULT)
         self.settings.bind("enable-developer-tools", devtools_toggle, "active",
