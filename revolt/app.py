@@ -58,7 +58,8 @@ class RevoltApp(Gtk.Application):
     def __on_startup(self, app):
         gtk_settings = Gtk.Settings.get_default()
         gtk_settings.set_property("gtk-application-prefer-dark-theme", True)
-        gtk_settings.set_property("gtk-dialogs-use-header", True)
+        gtk_settings.set_property("gtk-dialogs-use-header",
+                                  self.settings.get_boolean("use-header-bar"))
         self.statusicon = SysTrayStatusIcon(self, 'disconnected')
         self.__action("quit", lambda *arg: self.quit())
         self.__action("about", self.__on_app_about)

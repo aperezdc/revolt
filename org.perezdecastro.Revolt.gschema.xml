@@ -14,6 +14,10 @@
 			<summary>Allow usage of the web inspector and JavaScript console</summary>
 			<default>false</default>
 		</key>
+		<key name="use-header-bar" type="b">
+			<summary>Whether to use a header bar. Disabling uses the decorations provided by the window manager.</summary>
+			<default>true</default>
+		</key>
 
 		<child name="saved-state" schema="org.perezdecastro.Revolt.State"/>
 	</schema>

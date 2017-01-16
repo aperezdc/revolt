@@ -26,7 +26,8 @@ class MainWindow(Gtk.ApplicationWindow):
             self.maximize()
         self.saved_state.bind("maximized", self, "is-maximized", Gio.SettingsBindFlags.SET)
 
-        self.set_titlebar(self.__make_headerbar())
+        if application.settings.get_boolean("use-header-bar"):
+            self.set_titlebar(self.__make_headerbar())
         self.set_title(u"Revolt")
         application.add_window(self)
         self._webview = WebKit2.WebView(user_content_manager=self._user_content_manager,
