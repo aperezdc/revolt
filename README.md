@@ -53,7 +53,7 @@ the sandboxed applications, which are needed for some features to work. Please
 install them using your distribution's package manager:
 
 * Debian: [xdg-desktop-portal-gtk](https://packages.debian.org/search?keywords=xdg-desktop-portal-gtk).
-* Arch Linux: [xdg-desktop-portal-gtk](https://aur.archlinux.org/packages/xdg-desktop-portal-gtk/) (AUR).
+* Arch Linux: [xdg-desktop-portal-gtk](https://www.archlinux.org/packages/extra/x86_64/xdg-desktop-portal-gtk/).
 * Fedora: [xdg-desktop-portal-gtk](https://admin.fedoraproject.org/pkgdb/package/rpms/xdg-desktop-portal-gtk/).
 
 Some features, remarkably the desktop notifications, _will not work without the
@@ -72,12 +72,19 @@ error: runtime/org.gnome.Platform/x86_64/3.22 not installed
 ```
 
 If you need to install the runtime manually, you can do so by issuing the
-following commands:
+following command:
+
+```
+flatpak [--user] remote-add --from gnome https://sdk.gnome.org/gnome.flatpakrepo
+```
+
+If your Flatpak version is older than 0.6.13, use the following commands
+instead:
 
 ```sh
 wget https://sdk.gnome.org/keys/gnome-sdk.gpg
-flatpak remote-add --gpg-import=gnome-sdk.gpg gnome https://sdk.gnome.org/repo/
-flatpak install [--user] gnome org.gnome.Platform 3.22
+flatpak [--user] remote-add --gpg-import=gnome-sdk.gpg gnome https://sdk.gnome.org/repo/
+flatpak [--user] install gnome org.gnome.Platform 3.22
 ```
 
 Manual Installation
