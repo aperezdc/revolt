@@ -6,6 +6,21 @@
 #
 # Distributed under terms of the GPv3 license.
 
+from gi.repository import Gdk
+from gi.repository import Gtk
+
+
+if hasattr(Gtk, "show_uri_on_window"):
+    def show_uri(parent, uri, timestamp=None):
+        if timestamp is None:
+            timestamp = Gdk.CURRENT_TIME
+        Gtk.show_uri_on_window(parent, uri, timestamp)
+else:
+    def show_uri(parent, uri, timestamp=None):
+        if timestamp is None:
+            timestamp = Gdk.CURRENT_TIME
+        Gtk.show_uri(None, uri, timestamp)
+
 
 class CachedProperty(object):
     __slots__ = ("value", "get_value")

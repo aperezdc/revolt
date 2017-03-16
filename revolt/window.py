@@ -7,7 +7,7 @@
 # Distributed under terms of the GPLv3 license.
 
 from gi.repository import GLib, Gtk, Gdk, Gio, WebKit2, GObject
-from .util import cachedproperty
+from .util import cachedproperty, show_uri
 
 
 class MainWindow(Gtk.ApplicationWindow):
@@ -112,11 +112,11 @@ class MainWindow(Gtk.ApplicationWindow):
             if decision.get_navigation_type() == WebKit2.NavigationType.LINK_CLICKED:
                 uri = decision.get_request().get_uri()
                 if not uri.startswith(self.application.riot_url):
-                    Gtk.show_uri(uri)
+                    show_uri(self, uri)
                     return True
         elif decision_type == WebKit2.PolicyDecisionType.NEW_WINDOW_ACTION:
             if decision.get_navigation_type() == WebKit2.NavigationType.LINK_CLICKED:
-                Gtk.show_uri(None, decision.get_request().get_uri(), Gdk.CURRENT_TIME)
+                show_uri(self, decision.get_request().get_uri())
                 return True
         return False
 
