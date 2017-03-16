@@ -6,7 +6,7 @@
 #
 # Distributed under terms of the GPLv3 license.
 
-from gi.repository import GLib, Gtk, Gdk, Gio, WebKit2, GObject
+from gi.repository import GLib, Gtk, Gio, WebKit2, GObject
 from .util import cachedproperty, show_uri
 
 
