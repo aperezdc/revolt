@@ -139,6 +139,11 @@ class MainWindow(Gtk.ApplicationWindow):
             self.network_busy = True
             self.application.statusicon.set_status("disconnected")
 
+    @cachedproperty
+    def _notification_icon(self):
+        icon_id = self.application.get_application_id() + "-symbolic"
+        return Gio.ThemedIcon.new(icon_id)
+
     def __on_show_notification(self, webview, notification):
         # TODO: Handle notification clicked, and so
         if not self.has_toplevel_focus():
@@ -146,7 +151,7 @@ class MainWindow(Gtk.ApplicationWindow):
             notif = Gio.Notification.new(notification.get_title())
             notif.set_body(notification.get_body())
             # TODO: Use the avatar of the contact, if available.
-            notif.set_icon(Gio.ThemedIcon.new("revolt"))
+            notif.set_icon(self._notification_icon)
             notif.set_priority(Gio.NotificationPriority.HIGH)
             # use title as notification id:
             # allows to reuse one notification for the same conversation
