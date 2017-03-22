@@ -61,9 +61,6 @@ class MainWindow(Gtk.ApplicationWindow):
         # binary drivers (i.e. NVidia) with Flatpak build. See issue #29.
         if hasattr(websettings, "set_hardware_acceleration_policy"):
             websettings.set_hardware_acceleration_policy(WebKit2.HardwareAccelerationPolicy.NEVER)
-        else:
-            import os
-            os.environ["WEBKIT_DISABLE_COMPOSITING_MODE"] = "1"
 
         self._webview.show_all()
         self.add(self._webview)
