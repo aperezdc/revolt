@@ -8,7 +8,7 @@
 
 from os import environ
 from gi.repository import Gtk, Gio
-from .statusicon import SysTrayStatusIcon
+from .statusicon import StatusIcon
 from .window import MainWindow
 
 DEFAULT_APP_ID = "org.perezdecastro.Revolt"
@@ -59,7 +59,7 @@ class RevoltApp(Gtk.Application):
         gtk_settings = Gtk.Settings.get_default()
         gtk_settings.set_property("gtk-dialogs-use-header",
                                   self.settings.get_boolean("use-header-bar"))
-        self.statusicon = SysTrayStatusIcon(self, 'disconnected')
+        self.statusicon = StatusIcon(self)
         self.__action("quit", lambda *arg: self.quit())
         self.__action("about", self.__on_app_about)
         self.__action("preferences", self.__on_app_preferences)

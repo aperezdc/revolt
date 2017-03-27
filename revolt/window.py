@@ -8,6 +8,7 @@
 
 from gi.repository import GLib, Gtk, Gio, WebKit2, GObject
 from .util import cachedproperty, show_uri
+from . import statusicon
 
 
 class MainWindow(Gtk.ApplicationWindow):
@@ -140,10 +141,10 @@ class MainWindow(Gtk.ApplicationWindow):
     def __on_load_changed(self, webview, event):
         if event == WebKit2.LoadEvent.FINISHED:
             self.network_busy = False
-            self.application.statusicon.set_status("connected")
+            self.application.statusicon.set_status(statusicon.Status.CONNECTED)
         else:
             self.network_busy = True
-            self.application.statusicon.set_status("disconnected")
+            self.application.statusicon.set_status(statusicon.Status.DISCONNECTED)
 
     @cachedproperty
     def _notification_icon(self):
