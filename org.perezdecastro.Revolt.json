@@ -31,7 +31,53 @@
   "build-options": {
     "strip": false
   },
+  "cleanup": [
+    "/include",
+    "/lib/*.la",
+    "/libexec",
+    "/share/doc",
+    "/share/gtk-doc"
+  ],
   "modules": [
+    {
+      "name": "libdbusmenu",
+      "build-options": {
+        "env": {
+          "HAVE_VALGRIND_TRUE": "#",
+          "HAVE_VALGRIND_FALSE": ""
+        }
+      },
+      "config-opts": [
+        "--with-gtk=3",
+        "--disable-dumper",
+        "--disable-static",
+        "--disable-tests",
+        "--disable-vala",
+        "--enable-introspection=yes"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://launchpad.net/libdbusmenu/16.04/16.04.0/+download/libdbusmenu-16.04.0.tar.gz",
+          "sha256": "b9cc4a2acd74509435892823607d966d424bd9ad5d0b00938f27240a1bfa878a"
+        }
+      ]
+    },
+    {
+      "name": "statusnotifier",
+      "config-opts": [
+        "--disable-static",
+        "--enable-dbusmenu",
+        "--enable-introspection"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://github.com/jjk-jacky/statusnotifier/archive/1.0.0.tar.gz",
+          "sha256": "a307f04bc3ae749fd2bd368c3752dec2f1dbd180da89c737f1dda63a698d441b"
+        }
+      ]
+    },
     {
       "name": "revolt",
       "sources": [
