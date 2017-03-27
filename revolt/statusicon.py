@@ -80,7 +80,6 @@ class StatusIconImplSNI(StatusIconImpl):
             return
 
         self._sni.connect("registration-failed", self.__on_registration_failed)
-        #self._sni.connect("context-menu", self.__on_context_menu)
         self._sni.connect("activate", self.__on_activate)
         self._sni.set_from_pixbuf(self.SNI_ATTENTION_ICON, self._attention_icon_pixbuf)
         self._sni.set_title("Revolt")
