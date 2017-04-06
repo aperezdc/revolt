@@ -37,13 +37,10 @@ class StatusIconImplSNI(StatusIconImpl):
 
     def __init__(self, delegate, context_menu, app, failure_callback):
         super().__init__(delegate)
-        try:
-            import gi
-            gi.require_version("StatusNotifier", "1.0")
-            from gi.repository import StatusNotifier
-        except ImportError:
-            failure_callback(self)
-            return
+
+        import gi
+        gi.require_version("StatusNotifier", "1.0")
+        from gi.repository import StatusNotifier
 
         if hasattr(StatusNotifier.Icon, "ATTENTION_ICON"):
             self.SNI_ATTENTION_ICON = StatusNotifier.Icon.ATTENTION_ICON
@@ -75,9 +72,7 @@ class StatusIconImplSNI(StatusIconImpl):
         if not self._sni.set_context_menu(context_menu):
             # TODO: No DbusMenu support built into StatusIcon, we need to handle the
             #  "context-menu" signal ourselves. For now, fallback to use GtkStatusIcon
-            print("StatusNotifier does not support DbusMenu, falling back to GtkStatusIcon")
-            failure_callback(self)
-            return
+            raise RuntimeError("StatusNotifier does not support DbusMenu, falling back to GtkStatusIcon")
 
         self._sni.connect("registration-failed", self.__on_registration_failed)
         self._sni.connect("activate", self.__on_activate)
@@ -216,7 +211,11 @@ class StatusIcon(object):
         self.__tooltip = None
         # Try using StatusNotifier first
         self._contextmenu.insert_action_group("app", app)
-        self._impl = StatusIconImplSNI(self, self._contextmenu, app, self.__sni_failed)
+        try:
+            self._impl = StatusIconImplSNI(self, self._contextmenu, app, self.__sni_failed)
+        except Exception as e:
+            print("StatusNotifier failed, using GtkStatusIcon instead -", str(e))
+            self.__sni_failed(None)
         self.__configure_impl()
 
     def __sni_failed(self, sni_impl):
