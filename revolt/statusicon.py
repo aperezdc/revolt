@@ -201,7 +201,7 @@ class StatusIconImplGSI(StatusIconImpl):
     def __blink(self):
         self._flipflop = not self._flipflop
         self.__draw_icon()
-        return self.status is Status.BLINKING
+        return self._status is Status.BLINKING
 
 
 class StatusIcon(object):
