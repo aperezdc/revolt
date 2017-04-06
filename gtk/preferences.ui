@@ -62,7 +62,6 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="width_request">100</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="selectable">False</property>
@@ -76,7 +75,10 @@
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Riot URL</property>
+                                <property name="label" translatable="yes">Riot _URL</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">riot-url-entry</property>
+                                <property name="track_visited_links">False</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -141,7 +143,6 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="width_request">100</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="selectable">False</property>
@@ -155,7 +156,9 @@
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Zoom</property>
+                                <property name="label" translatable="yes">_Zoom</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">zoom-factor-scale</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -246,7 +249,6 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkListBoxRow">
-                        <property name="width_request">100</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="selectable">False</property>
@@ -266,7 +268,9 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="label" translatable="yes">Developer Tools</property>
+                                    <property name="label" translatable="yes">Developer _Tools</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">dev-tools-toggle</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
