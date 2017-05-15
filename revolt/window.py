@@ -2,12 +2,13 @@
 # -*- coding: utf-8 -*-
 # vim:fenc=utf-8
 #
-# Copyright © 2016 Adrian Perez <aperez@igalia.com>
+# Copyright © 2016-2017 Adrian Perez <aperez@igalia.com>
 #
 # Distributed under terms of the GPLv3 license.
 
 from gi.repository import GLib, Gtk, Gio, WebKit2, GObject
 from .util import cachedproperty, show_uri
+from . import accelerators
 from . import statusicon
 
 
@@ -49,6 +50,9 @@ class MainWindow(Gtk.ApplicationWindow):
         self.__compact_rooms_css = None
         application.settings.connect("changed::greasemonkey-compact-rooms",
                                      self.__on_greasemonkey_compact_rooms_changed)
+
+        self.add_accel_group(accelerators.window_keys)
+
         # Force reading the setting once on startup.
         self.__on_greasemonkey_compact_rooms_changed(application.settings, "greasemonkey-compact-rooms")
 
