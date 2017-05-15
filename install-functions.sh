@@ -1,9 +1,9 @@
 #! /bin/bash
 #
 # install.sh
-# Copyright (C) 2016 Adrian Perez <aperez@igalia.com>
+# Copyright (C) 2016-2017 Adrian Perez <aperez@igalia.com>
 #
-# Distributed under terms of the MIT license.
+# Distributed under terms of the GPLv3 license.
 #
 
 install_log_file=''
