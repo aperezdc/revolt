@@ -10,6 +10,7 @@ from os import environ
 from gi.repository import Gtk, Gio
 from .statusicon import StatusIcon
 from .window import MainWindow
+from . import accelerators
 
 DEFAULT_APP_ID = "org.perezdecastro.Revolt"
 APP_ID = environ.get("REVOLT_OVERRIDE_APPLICATION_ID", DEFAULT_APP_ID).strip()
@@ -119,6 +120,7 @@ class RevoltApp(Gtk.Application):
                 self.riot_url = new_url
                 self.window.load_riot()
         window.connect("hide", on_hide)
+        window.add_accel_group(accelerators.window_close_on_escape)
         window.set_transient_for(self.window)
         window.present()
 
