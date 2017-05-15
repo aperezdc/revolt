@@ -13,5 +13,6 @@ def __window_close(accel_group, window, key, modifiers):
     assert isinstance(window, Gtk.Window)
     window.close()
 
+
 window_close_on_escape = Gtk.AccelGroup()
 window_close_on_escape.connect(Gdk.KEY_Escape, 0, 0, __window_close)
