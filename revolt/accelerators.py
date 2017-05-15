@@ -35,6 +35,12 @@ def __window_modify_zoom(accel_group, window, key, modifiers):
             window.application.settings.set_value("zoom-factor", value)
 
 
+def __window_webview_reload(accel_group, window, key, modifiers):
+    window.reload_riot(bypass_cache=True)
+
+
 window_keys = Gtk.AccelGroup()
+window_keys.connect(Gdk.KEY_r, Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK, 0,
+                    __window_webview_reload)
 for key in (Gdk.KEY_plus, Gdk.KEY_minus, Gdk.KEY_0):
     window_keys.connect(key, Gdk.ModifierType.CONTROL_MASK, 0, __window_modify_zoom)

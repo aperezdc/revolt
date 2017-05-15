@@ -209,6 +209,12 @@ class MainWindow(Gtk.ApplicationWindow):
         self._webview.connect("show-notification", self.__on_show_notification)
         self._webview.connect("permission-request", self.__on_permission_request)
 
+    def reload_riot(self, bypass_cache=False):
+        if bypass_cache:
+            self._webview.reload_bypass_cache()
+        else:
+            self._webview.reload()
+
     def load_riot(self):
         self._webview.load_uri(self.application.riot_url)
         return self
