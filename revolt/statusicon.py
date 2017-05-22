@@ -138,9 +138,9 @@ class StatusIconImplGSI(StatusIconImpl):
 
     def set_tooltip(self, text):
         if text is None:
-            self._icon.set_tooltip_text("<b>Revolt</b>")
+            self._icon.set_tooltip_text("Revolt")
         else:
-            self._icon.set_tooltip_markup("<b>Revolt</b><br>{!s}".format(text))
+            self._icon.set_tooltip_markup("<b>Revolt</b>\n{!s}".format(text))
 
     def set_status(self, status):
         if status is Status.BLINKING:
