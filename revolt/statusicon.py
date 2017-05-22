@@ -7,9 +7,8 @@
 # Distributed under terms of the GPLv3 license.
 
 from gi.repository import Gtk, GLib
-from .util import cachedproperty
+from .util import cachedproperty, desktop_is
 import enum
-import os
 
 
 class Status(enum.Enum):
@@ -189,11 +188,9 @@ class StatusIconImplGSI(StatusIconImpl):
             icon_size = '24'
         else:
             icon_size = '16'
-        # detect KDE session. see gajim bug #5476
-        if os.environ.get('KDE_FULL_SESSION') == 'true':
+        if desktop_is('kde'):  # KDE: see gajim bug #5476
             icon_size = '32'
-        # detect MATE session.
-        if os.environ.get('MATE_DESKTOP_SESSION_ID'):
+        if desktop_is('mate'):
             icon_size = '16'
         self.__load_icons(icon_size)
         self.__draw_icon()

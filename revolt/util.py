@@ -8,6 +8,7 @@
 
 from gi.repository import Gdk
 from gi.repository import Gtk
+import os
 
 
 if hasattr(Gtk, "show_uri_on_window"):
@@ -39,3 +40,17 @@ class CachedProperty(object):
 
 def cachedproperty(f, doc=None):
     return property(CachedProperty(f), doc=doc)
+
+
+def desktop_is(desktopname):
+    desktopname = desktopname.lower()
+    if desktopname == 'kde' and os.environ.get('KDE_FULL_SESSION') == 'true':
+        return True
+    if desktopname == 'mate' and os.environ.get('MATE_DESKTOP_SESSION_ID'):
+        return True
+    for desktopvarname in ['XDG_SESSION_DESKTOP', 'DESKTOP_SESSION', 'XDG_CURRENT_DESKTOP',
+                           'XDG_SESSION_DESKTOP', 'XDG_MENU_PREFIX', 'GDMSESSION', 'XDG_DATA_DIRS']:
+        desktopvarvalue = os.environ.get(desktopvarname)
+        if desktopvarvalue and desktopname in desktopvarvalue.lower():
+            return True
+    return False
