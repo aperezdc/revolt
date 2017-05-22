@@ -183,15 +183,15 @@ class StatusIconImplGSI(StatusIconImpl):
 
     def __on_icon_size_change(self, statusicon, size):
         if size > 31:
-            icon_size = '32'
+            icon_size = "32"
         elif size > 23:
-            icon_size = '24'
+            icon_size = "24"
         else:
-            icon_size = '16'
-        if desktop_is('kde'):  # KDE: see gajim bug #5476
-            icon_size = '32'
-        if desktop_is('mate'):
-            icon_size = '16'
+            icon_size = "16"
+        if desktop_is("kde"):  # KDE: see gajim bug #5476
+            icon_size = "32"
+        if desktop_is("mate"):
+            icon_size = "16"
         self.__load_icons(icon_size)
         self.__draw_icon()
 

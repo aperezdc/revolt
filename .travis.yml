@@ -3,7 +3,7 @@ language: python
 python:
   - 3.5
 install:
-  - pip install flake8
+  - pip install flake8 flake8-quotes
 script:
   - ln -s revolt revolt.py
   - flake8 .

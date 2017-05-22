@@ -188,7 +188,7 @@ class MainWindow(Gtk.ApplicationWindow):
             notif.set_body(notification.get_body())
             # TODO: Use the avatar of the contact, if available.
             notif.set_icon(self._notification_icon)
-            if not desktop_is('xfce'):  # Workaround for XFCE bug #13586
+            if not desktop_is("xfce"):  # Workaround for XFCE bug #13586
                 notif.set_priority(Gio.NotificationPriority.HIGH)
             # use title as notification id:
             # allows to reuse one notification for the same conversation
