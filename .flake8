@@ -3,3 +3,4 @@
 filename = *.py
 hang-closing = False
 max-line-length = 110
+inline-quotes = double

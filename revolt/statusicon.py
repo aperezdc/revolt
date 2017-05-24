@@ -7,9 +7,8 @@
 # Distributed under terms of the GPLv3 license.
 
 from gi.repository import Gtk, GLib
-from .util import cachedproperty
+from .util import cachedproperty, desktop_is
 import enum
-import os
 
 
 class Status(enum.Enum):
@@ -139,9 +138,9 @@ class StatusIconImplGSI(StatusIconImpl):
 
     def set_tooltip(self, text):
         if text is None:
-            self._icon.set_tooltip_text("<b>Revolt</b>")
+            self._icon.set_tooltip_text("Revolt")
         else:
-            self._icon.set_tooltip_markup("<b>Revolt</b><br>{!s}".format(text))
+            self._icon.set_tooltip_markup("<b>Revolt</b>\n{!s}".format(text))
 
     def set_status(self, status):
         if status is Status.BLINKING:
@@ -184,17 +183,15 @@ class StatusIconImplGSI(StatusIconImpl):
 
     def __on_icon_size_change(self, statusicon, size):
         if size > 31:
-            icon_size = '32'
+            icon_size = "32"
         elif size > 23:
-            icon_size = '24'
+            icon_size = "24"
         else:
-            icon_size = '16'
-        # detect KDE session. see gajim bug #5476
-        if os.environ.get('KDE_FULL_SESSION') == 'true':
-            icon_size = '32'
-        # detect MATE session.
-        if os.environ.get('MATE_DESKTOP_SESSION_ID'):
-            icon_size = '16'
+            icon_size = "16"
+        if desktop_is("kde"):  # KDE: see gajim bug #5476
+            icon_size = "32"
+        if desktop_is("mate"):
+            icon_size = "16"
         self.__load_icons(icon_size)
         self.__draw_icon()
 

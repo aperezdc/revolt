@@ -7,7 +7,7 @@
 # Distributed under terms of the GPLv3 license.
 
 from gi.repository import GLib, Gtk, Gio, WebKit2, GObject
-from .util import cachedproperty, show_uri
+from .util import cachedproperty, show_uri, desktop_is
 from . import accelerators
 from . import statusicon
 
@@ -188,7 +188,8 @@ class MainWindow(Gtk.ApplicationWindow):
             notif.set_body(notification.get_body())
             # TODO: Use the avatar of the contact, if available.
             notif.set_icon(self._notification_icon)
-            notif.set_priority(Gio.NotificationPriority.HIGH)
+            if not desktop_is("xfce"):  # Workaround for XFCE bug #13586
+                notif.set_priority(Gio.NotificationPriority.HIGH)
             # use title as notification id:
             # allows to reuse one notification for the same conversation
             notification_id = notification.get_title()
