@@ -127,7 +127,7 @@ class StatusIconImplGSI(StatusIconImpl):
         self._flipflop = True
         self._blinkmilliseconds = 500
         self._icondata = {}
-        self.__load_icons(self._size)
+        self.__load_icons(self._size, app)
         self._icon = Gtk.StatusIcon()
         self._icon.set_visible(True)
         self._icon.set_property("has-tooltip", True)
@@ -151,11 +151,15 @@ class StatusIconImplGSI(StatusIconImpl):
             GLib.timeout_add(2 * self._blinkmilliseconds, self.__draw_icon, status)
         self._status = status
 
-    def __load_icons(self, size):
+    def __load_icons(self, size, app=None):
+        if app is None:
+            app = Gtk.Application.get_default()
         self._size = size
         theme = Gtk.IconTheme.get_default()
         for status, icon_suffix in self.ICON_STATUS_NAMES.items():
-            icon_name = "revolt" + icon_suffix + "-symbolic"
+            icon_name = app.get_application_id() + icon_suffix + "-symbolic"
+            icon_name = app.get_application_id() + icon_suffix
+            print("Loading icon:", icon_name)
             self._icondata[status] = theme.load_icon(icon_name, int(size),
                                                      Gtk.IconLookupFlags.FORCE_SVG |
                                                      Gtk.IconLookupFlags.FORCE_SYMBOLIC)

@@ -31,5 +31,7 @@ for size in 16x16 16x16@2x 24x24 24x24@2x 32x32 64x64 ; do
 done
 install-icon "${APP_ID}" scalable apps icons/scalable/apps/revolt.svg
 install-icon "${APP_ID}" symbolic apps icons/scalable/apps/revolt-symbolic.svg
+install-icon "${APP_ID}-status-blink-symbolic" scalable status icons/scalable/status/revolt-status-blink-symbolic.svg
+install-icon "${APP_ID}-status-online-symbolic" scalable status icons/scalable/status/revolt-status-online-symbolic.svg
 
 install-finish

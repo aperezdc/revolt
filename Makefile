@@ -18,7 +18,7 @@ gschemas.compiled: $(APP_ID).gschema.xml
 	glib-compile-schemas .
 
 run: $(APP_ID).gresource gschemas.compiled
-	GSETTINGS_SCHEMA_DIR=$(CURDIR) __REVOLT_DEVELOPMENT=1 $(CURDIR)/bin/revolt
+	XDG_DATA_DIRS="$${XDG_DATA_DIRS}:$(CURDIR)" GSETTINGS_SCHEMA_DIR='$(CURDIR)' __REVOLT_DEVELOPMENT=1 '$(CURDIR)/bin/revolt'
 
 install:
 	SKIP_ICON_CACHE_UPDATE=1 ./install.sh --prefix='$(PREFIX)' $(if $(DESTDIR),--destdir='$(DESTDIR)')
