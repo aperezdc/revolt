@@ -95,19 +95,16 @@ class RevoltApp(Gtk.Application):
         return (builder.get_object(name) for name in names)
 
     def __on_app_preferences(self, action, param):
-        window, url_entry, zoom_factor, zoom_factor_reset, devtools_toggle, compact_rooms_toggle = \
+        window, url_entry, zoom_factor, zoom_factor_reset, devtools_toggle = \
                 self._build("gtk/preferences.ui",
                             "settings-window",
                             "riot-url-entry",
                             "zoom-factor",
                             "zoom-factor-reset",
-                            "dev-tools-toggle",
-                            "compact-rooms-toggle")
+                            "dev-tools-toggle")
         self.settings.bind("zoom-factor", zoom_factor, "value",
                            Gio.SettingsBindFlags.DEFAULT)
         self.settings.bind("enable-developer-tools", devtools_toggle, "active",
-                           Gio.SettingsBindFlags.DEFAULT)
-        self.settings.bind("greasemonkey-compact-rooms", compact_rooms_toggle, "active",
                            Gio.SettingsBindFlags.DEFAULT)
         zoom_factor_reset.connect("clicked", lambda button:
                                   self.settings.set_double("zoom-factor", 1.0))
@@ -127,12 +124,6 @@ class RevoltApp(Gtk.Application):
     def __on__riot_settings(self, action, param):
         self.show()
         self.window.load_settings_page()
-
-    def load_resource(self, relpath):
-        gfile = Gio.File.new_for_uri("resource://{}/{}".format(
-            self.get_resource_base_path(), relpath))
-        success, data, etag = gfile.load_contents()
-        return data
 
     def show(self):
         self.window.show()
