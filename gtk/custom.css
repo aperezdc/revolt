@@ -11,11 +11,11 @@
 
 .titlebar.revolt-slim separator,
 .titlebar.revolt-slim button {
-	margin-top: 3px;
-	margin-bottom: 3px;
+	margin: 3px 0 3px 0;
 }
 
 .titlebar.revolt-slim button {
 	min-height: 16px;
 	min-width: 18px;
+	padding: 3px 4px 3px 4px;
 }
