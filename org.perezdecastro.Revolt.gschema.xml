@@ -18,10 +18,6 @@
 			<summary>Whether to use a header bar. Disabling uses the decorations provided by the window manager.</summary>
 			<default>true</default>
 		</key>
-		<key name="greasemonkey-compact-rooms" type="b">
-			<summary>Inject user script to make Riot rooms more compact.</summary>
-			<default>false</default>
-		</key>
 
 		<child name="saved-state" schema="org.perezdecastro.Revolt.State"/>
 	</schema>

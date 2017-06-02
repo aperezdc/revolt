@@ -47,14 +47,7 @@ class MainWindow(Gtk.ApplicationWindow):
                                   "enable-write-console-messages-to-stdout",
                                   Gio.SettingsBindFlags.GET)
 
-        self.__compact_rooms_css = None
-        application.settings.connect("changed::greasemonkey-compact-rooms",
-                                     self.__on_greasemonkey_compact_rooms_changed)
-
         self.add_accel_group(accelerators.window_keys)
-
-        # Force reading the setting once on startup.
-        self.__on_greasemonkey_compact_rooms_changed(application.settings, "greasemonkey-compact-rooms")
 
         websettings.set_allow_file_access_from_file_urls(True)
         websettings.set_allow_modal_dialogs(False)  # TODO
@@ -78,24 +71,6 @@ class MainWindow(Gtk.ApplicationWindow):
         self.add(self._webview)
         self.__connect_widgets()
         self.__notification_ids = set()
-
-    def __on_greasemonkey_compact_rooms_changed(self, settings, key):
-        enable = settings.get_boolean(key)
-        if enable == (self.__compact_rooms_css is not None):
-            return
-        # TODO: We will need better logic if/when we provide multiple CSS
-        #       snippets. Disabling/enabling one would mean always removing
-        #       all of them, and then re-adding the enabled ones. This works
-        #       for now.
-        if enable:
-            css = self.application.load_resource("greasemonkey/compact-rooms.css")
-            self.__compact_rooms_css = WebKit2.UserStyleSheet(css.decode("utf-8"),
-                                                              WebKit2.UserContentInjectedFrames.TOP_FRAME,
-                                                              WebKit2.UserStyleLevel.USER)
-            self._user_content_manager.add_style_sheet(self.__compact_rooms_css)
-        else:
-            self._user_content_manager.remove_all_style_sheets()
-            self.__compact_rooms_css = None
 
     def do_configure_event(self, event):
         result = Gtk.ApplicationWindow.do_configure_event(self, event)

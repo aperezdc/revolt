@@ -8,6 +8,5 @@
 		<file preprocess="xml-stripblanks" compressed="true">icons/scalable/apps/revolt-symbolic.svg</file>
 		<file preprocess="xml-stripblanks" compressed="true">icons/scalable/status/revolt-status-blink-symbolic.svg</file>
 		<file preprocess="xml-stripblanks" compressed="true">icons/scalable/status/revolt-status-online-symbolic.svg</file>
-		<file compressed="true">greasemonkey/compact-rooms.css</file>
 	</gresource>
 </gresources>
