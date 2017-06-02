@@ -51,15 +51,16 @@ class StatusIconImplSNI(StatusIconImpl):
         self.SNI_ACTIVE = StatusNotifier.Status.ACTIVE
 
         theme = Gtk.IconTheme.get_default()
+        print("Loading StatusNotifier icons...")
         self._offline_icon_pixbuf = theme.load_icon(app.get_application_id(),
                                                     self.ICON_PIXBUF_SIZE,
                                                     Gtk.IconLookupFlags.FORCE_SVG |
                                                     Gtk.IconLookupFlags.FORCE_SYMBOLIC)
-        self._attention_icon_pixbuf = theme.load_icon("revolt-status-blink",
+        self._attention_icon_pixbuf = theme.load_icon(app.get_application_id() + "-status-blink",
                                                       self.ICON_PIXBUF_SIZE,
                                                       Gtk.IconLookupFlags.FORCE_SVG |
                                                       Gtk.IconLookupFlags.FORCE_SYMBOLIC)
-        self._online_icon_pixbuf = theme.load_icon("revolt-status-online",
+        self._online_icon_pixbuf = theme.load_icon(app.get_application_id() + "-status-online",
                                                    self.ICON_PIXBUF_SIZE,
                                                    Gtk.IconLookupFlags.FORCE_SVG |
                                                    Gtk.IconLookupFlags.FORCE_SYMBOLIC)
