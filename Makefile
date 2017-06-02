@@ -10,7 +10,7 @@ config.mk: configure
 
 -include config.mk
 
-RESOURCE_FILES := $(wildcard gtk/*.ui icon/*.svg)
+RESOURCE_FILES := $(wildcard gtk/*.ui gtk/*.css icon/*.svg)
 $(APP_ID).gresource: $(APP_ID).gresources.xml $(RESOURCE_FILES)
 	glib-compile-resources --target=$@ $<
 

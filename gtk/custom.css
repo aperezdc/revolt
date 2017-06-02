@@ -1,0 +1,21 @@
+/*
+ * custom.css
+ * Copyright (C) 2017 Adrian Perez
+ *
+ * Distributed under terms of the GPLv3 license.
+ */
+
+.titlebar.revolt-slim {
+	min-height: 0;
+}
+
+.titlebar.revolt-slim separator,
+.titlebar.revolt-slim button {
+	margin-top: 3px;
+	margin-bottom: 3px;
+}
+
+.titlebar.revolt-slim button {
+	min-height: 16px;
+	min-width: 18px;
+}

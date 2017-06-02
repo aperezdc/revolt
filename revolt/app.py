@@ -7,7 +7,7 @@
 # Distributed under terms of the GPLv3 license.
 
 from os import environ
-from gi.repository import Gtk, Gio
+from gi.repository import Gtk, Gio, Gdk
 from .statusicon import StatusIcon
 from .window import MainWindow
 from . import accelerators
@@ -60,6 +60,10 @@ class RevoltApp(Gtk.Application):
         gtk_settings = Gtk.Settings.get_default()
         gtk_settings.set_property("gtk-dialogs-use-header",
                                   self.settings.get_boolean("use-header-bar"))
+        css_provider = Gtk.CssProvider()
+        css_provider.load_from_resource(self.get_resource_base_path() + "/gtk/custom.css")
+        Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), css_provider,
+                                                 Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         self.statusicon = StatusIcon(self)
         self.__action("quit", lambda *arg: self.quit())
         self.__action("about", self.__on_app_about)
