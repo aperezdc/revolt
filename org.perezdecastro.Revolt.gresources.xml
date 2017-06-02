@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <gresources>
 	<gresource prefix="/org/perezdecastro/Revolt">
+		<file compressed="true">gtk/custom.css</file>
 		<file preprocess="xml-stripblanks" compressed="true">gtk/menus-appmenu.ui</file>
 		<file preprocess="xml-stripblanks" compressed="true">gtk/preferences.ui</file>
 		<file preprocess="xml-stripblanks" compressed="true">icons/revolt-about.svg</file>

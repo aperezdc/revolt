@@ -82,6 +82,7 @@ class MainWindow(Gtk.ApplicationWindow):
     def __make_headerbar(self):
         header = Gtk.HeaderBar()
         header.set_show_close_button(True)
+        header.get_style_context().add_class("revolt-slim")
         spinner = Gtk.Spinner()
         header.pack_end(spinner)
         self.bind_property("network-busy", spinner, "active",
