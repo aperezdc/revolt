@@ -22,5 +22,5 @@ if [[ -n ${EMAIL} ]] ; then
 fi
 
 set -x
-exec flatpak-builder "${buildargs[@]}" "${BUILDDIR}" org.perezdecastro.Revolt.json
+exec flatpak-builder "${buildargs[@]}" "${BUILDDIR}" "$@" org.perezdecastro.Revolt.json
 
