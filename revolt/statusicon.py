@@ -51,7 +51,6 @@ class StatusIconImplSNI(StatusIconImpl):
         self.SNI_ACTIVE = StatusNotifier.Status.ACTIVE
 
         theme = Gtk.IconTheme.get_default()
-        print("Loading StatusNotifier icons...")
         self._offline_icon_pixbuf = theme.load_icon(app.get_application_id(),
                                                     self.ICON_PIXBUF_SIZE,
                                                     Gtk.IconLookupFlags.FORCE_SVG |
@@ -160,7 +159,6 @@ class StatusIconImplGSI(StatusIconImpl):
         for status, icon_suffix in self.ICON_STATUS_NAMES.items():
             icon_name = app.get_application_id() + icon_suffix + "-symbolic"
             icon_name = app.get_application_id() + icon_suffix
-            print("Loading icon:", icon_name)
             self._icondata[status] = theme.load_icon(icon_name, int(size),
                                                      Gtk.IconLookupFlags.FORCE_SVG |
                                                      Gtk.IconLookupFlags.FORCE_SYMBOLIC)
@@ -267,6 +265,5 @@ class StatusIcon(object):
 
     # Delegate methods.
     def on_icon_activate(self, icon_impl):
-        print("StatusIcon activated")
         self.clear_notifications()
         self.__app.show()
