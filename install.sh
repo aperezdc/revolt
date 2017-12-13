@@ -16,6 +16,7 @@ install-setup "$0" "$@"
 install-bin bin/revolt
 install-desktop-file "${APP_ID}.desktop"
 install-prefixed share/revolt "${APP_ID}.gresource" -m644
+install-prefixed share/appdata "${APP_ID}.appdata.xml" -m644
 
 install-glib-gschema "${APP_ID}.gschema.xml"
 for file in ./[0-9][0-9]_${APP_ID}.gschema.override ; do
