@@ -17,10 +17,17 @@ declare -a buildargs=(
 	--subject="Revolt $(date +%Y%m%d).$(git describe --always --tags)"
 )
 
+declare -a updaterepoargs=(
+	--title=Revolt
+	--default-branch=master
+	--prune
+)
+
 if [[ -n ${EMAIL} ]] ; then
 	buildargs+=( --gpg-sign="${EMAIL}" )
+	updaterepoargs+=( --gpg-sign="${EMAIL}" )
 fi
 
 set -x
-exec flatpak-builder "${buildargs[@]}" "${BUILDDIR}" "$@" org.perezdecastro.Revolt.json
-
+flatpak-builder "${buildargs[@]}" "${BUILDDIR}" "$@" org.perezdecastro.Revolt.json
+flatpak build-update-repo "${updaterepoargs[@]}" "${REPODIR}"
