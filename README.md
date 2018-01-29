@@ -62,7 +62,7 @@ portal helpers_.
 ### GNOME Runtime
 
 Revolt uses the GNOME Flatpak runtime. Depending on the version of Flatpak
-installed on your system, you may need to instal it manually. You can check
+installed on your system, you may need to install it manually. You can check
 whether the runtime is missing by trying to run Revolt in a terminal:
 
 ```
