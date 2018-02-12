@@ -232,9 +232,9 @@ class StatusIcon(object):
         model = self.__app.get_menu_by_id("app-menu")
         if model is None:
             # If showing the application menu in the GNOME Shell top bar is
-            # disabled, then GtkApplication won't load gtk/menus-appmenu.ui
+            # disabled, then GtkApplication won't load gtk/menus.ui
             # automatically, but we still need it for the context menu.
-            (model,) = self.__app._build("gtk/menus-appmenu.ui", "app-menu")
+            (model,) = self.__app._build("gtk/menus.ui", "app-menu")
         return Gtk.Menu.new_from_model(model)
 
     def __add_notification_tooltip_text(self, text):
