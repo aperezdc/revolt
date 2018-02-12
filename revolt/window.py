@@ -35,6 +35,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self._webview = WebKit2.WebView(user_content_manager=self._user_content_manager,
                                         web_context=self._web_context)
         self._webview.connect("decide-policy", self.__on_decide_policy)
+        self._webview.connect("context-menu", self.__on_context_menu)
         application.settings.bind("zoom-factor", self._webview, "zoom-level",
                                   Gio.SettingsBindFlags.GET)
         if hasattr(self._webview, "set_maintains_back_forward_list"):
@@ -130,6 +131,34 @@ class MainWindow(Gtk.ApplicationWindow):
             if decision.get_navigation_type() == WebKit2.NavigationType.LINK_CLICKED:
                 show_uri(self, decision.get_request().get_uri())
                 return True
+        return False
+
+    @cachedproperty
+    def _context_menu_actions(self):
+        action_list = []
+        action = Gio.SimpleAction.new("preferences")
+        action.connect("activate", self.application.on_app_preferences)
+        action_list.append((action, "_Preferences"))
+        action = Gio.SimpleAction.new("riot-settings")
+        action.connect("activate", self.application.on_riot_settings)
+        action_list.append((action, "_Riot Settings"))
+        return tuple(action_list)
+
+    def __on_context_menu(self, webview, menu, event, hit_test):
+        # Tweak built-in entries.
+        for action in (WebKit2.ContextMenuAction.GO_BACK,
+                       WebKit2.ContextMenuAction.GO_FORWARD,
+                       WebKit2.ContextMenuAction.STOP):
+            for index in range(menu.get_n_items()):
+                item = menu.get_item_at_position(index)
+                if action == item.get_stock_action():
+                    menu.remove(item)
+                    break
+        # Add a separator.
+        menu.append(WebKit2.ContextMenuItem.new_separator())
+        # Append application-specfic entries.
+        for (action, label) in self._context_menu_actions:
+            menu.append(WebKit2.ContextMenuItem.new_from_gaction(action, label))
         return False
 
     def __on_has_toplevel_focus_changed(self, window, has_focus):

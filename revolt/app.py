@@ -67,8 +67,8 @@ class RevoltApp(Gtk.Application):
         self.statusicon = StatusIcon(self)
         self.__action("quit", lambda *arg: self.quit())
         self.__action("about", self.__on_app_about)
-        self.__action("preferences", self.__on_app_preferences)
-        self.__action("riot-settings", self.__on__riot_settings)
+        self.__action("preferences", self.on_app_preferences)
+        self.__action("riot-settings", self.on_riot_settings)
 
     def __on_shutdown(self, app):
         if self.window is not None:
@@ -98,7 +98,7 @@ class RevoltApp(Gtk.Application):
         builder = Gtk.Builder.new_from_resource(self.get_resource_base_path() + "/" + resource)
         return (builder.get_object(name) for name in names)
 
-    def __on_app_preferences(self, action, param):
+    def on_app_preferences(self, action, param):
         window, url_entry, zoom_factor, zoom_factor_reset, devtools_toggle = \
                 self._build("gtk/preferences.ui",
                             "settings-window",
@@ -125,7 +125,7 @@ class RevoltApp(Gtk.Application):
         window.set_transient_for(self.window)
         window.present()
 
-    def __on__riot_settings(self, action, param):
+    def on_riot_settings(self, action, param):
         self.show()
         self.window.load_settings_page()
 
