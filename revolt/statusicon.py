@@ -51,15 +51,15 @@ class StatusIconImplSNI(StatusIconImpl):
         self.SNI_ACTIVE = StatusNotifier.Status.ACTIVE
 
         theme = Gtk.IconTheme.get_default()
-        self._offline_icon_pixbuf = theme.load_icon(app.get_application_id(),
+        self._offline_icon_pixbuf = theme.load_icon("org.perezdecastro.Revolt",
                                                     self.ICON_PIXBUF_SIZE,
                                                     Gtk.IconLookupFlags.FORCE_SVG |
                                                     Gtk.IconLookupFlags.FORCE_SYMBOLIC)
-        self._attention_icon_pixbuf = theme.load_icon(app.get_application_id() + "-status-blink",
+        self._attention_icon_pixbuf = theme.load_icon("org.perezdecastro.Revolt-status-blink",
                                                       self.ICON_PIXBUF_SIZE,
                                                       Gtk.IconLookupFlags.FORCE_SVG |
                                                       Gtk.IconLookupFlags.FORCE_SYMBOLIC)
-        self._online_icon_pixbuf = theme.load_icon(app.get_application_id() + "-status-online",
+        self._online_icon_pixbuf = theme.load_icon("org.perezdecastro.Revolt-status-online",
                                                    self.ICON_PIXBUF_SIZE,
                                                    Gtk.IconLookupFlags.FORCE_SVG |
                                                    Gtk.IconLookupFlags.FORCE_SYMBOLIC)
@@ -157,8 +157,7 @@ class StatusIconImplGSI(StatusIconImpl):
         self._size = size
         theme = Gtk.IconTheme.get_default()
         for status, icon_suffix in self.ICON_STATUS_NAMES.items():
-            icon_name = app.get_application_id() + icon_suffix + "-symbolic"
-            icon_name = app.get_application_id() + icon_suffix
+            icon_name = "org.perezdecastro.Revolt" + icon_suffix
             self._icondata[status] = theme.load_icon(icon_name, int(size),
                                                      Gtk.IconLookupFlags.FORCE_SVG |
                                                      Gtk.IconLookupFlags.FORCE_SYMBOLIC)
