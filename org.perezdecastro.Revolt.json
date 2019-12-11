@@ -1,7 +1,7 @@
 {
   "app-id": "org.perezdecastro.Revolt",
   "runtime": "org.gnome.Platform",
-  "runtime-version": "3.28",
+  "runtime-version": "3.34",
   "sdk": "org.gnome.Sdk",
   "command": "revolt",
   "finish-args": [
@@ -40,6 +40,17 @@
   ],
   "modules": [
     {
+      "name": "intltool",
+      "cleanup": [ "*" ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://launchpad.net/intltool/trunk/0.51.0/+download/intltool-0.51.0.tar.gz",
+          "sha256": "67c74d94196b153b774ab9f89b2fa6c6ba79352407037c8c14d5aeb334e959cd"
+        }
+      ]
+    },
+    {
       "name": "libdbusmenu",
       "build-options": {
         "env": {
@@ -60,6 +71,10 @@
           "type": "archive",
           "url": "https://launchpad.net/libdbusmenu/16.04/16.04.0/+download/libdbusmenu-16.04.0.tar.gz",
           "sha256": "b9cc4a2acd74509435892823607d966d424bd9ad5d0b00938f27240a1bfa878a"
+        },
+        {
+          "type": "patch",
+          "path": "flatpak-builder-patches/libdbusmenu-build-fixes.diff"
         }
       ]
     },

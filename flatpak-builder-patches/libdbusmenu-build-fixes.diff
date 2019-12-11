@@ -1,0 +1,120 @@
+diff -ur libdbusmenu-16.04.0.orig/libdbusmenu-glib/Makefile.am libdbusmenu-16.04.0/libdbusmenu-glib/Makefile.am
+--- libdbusmenu-16.04.0.orig/libdbusmenu-glib/Makefile.am	2019-12-11 15:57:38.769791940 +0000
++++ libdbusmenu-16.04.0/libdbusmenu-glib/Makefile.am	2019-12-11 16:00:16.374963025 +0000
+@@ -66,7 +66,7 @@
+ libdbusmenu_glib_la_CFLAGS = \
+ 	$(DBUSMENUGLIB_CFLAGS) \
+ 	$(COVERAGE_CFLAGS) \
+-	-Wall -Werror -Wno-error=deprecated-declarations \
++	-Wall -Wno-error=deprecated-declarations \
+ 	-DG_LOG_DOMAIN="\"LIBDBUSMENU-GLIB\""
+ 
+ libdbusmenu_glib_la_LIBADD = \
+diff -ur libdbusmenu-16.04.0.orig/libdbusmenu-glib/Makefile.in libdbusmenu-16.04.0/libdbusmenu-glib/Makefile.in
+--- libdbusmenu-16.04.0.orig/libdbusmenu-glib/Makefile.in	2019-12-11 15:57:38.769791940 +0000
++++ libdbusmenu-16.04.0/libdbusmenu-glib/Makefile.in	2019-12-11 16:03:46.256566652 +0000
+@@ -498,7 +498,7 @@
+ libdbusmenu_glib_la_CFLAGS = \
+ 	$(DBUSMENUGLIB_CFLAGS) \
+ 	$(COVERAGE_CFLAGS) \
+-	-Wall -Werror -Wno-error=deprecated-declarations \
++	-Wall  -Wno-error=deprecated-declarations \
+ 	-DG_LOG_DOMAIN="\"LIBDBUSMENU-GLIB\""
+ 
+ libdbusmenu_glib_la_LIBADD = \
+diff -ur libdbusmenu-16.04.0.orig/libdbusmenu-gtk/Makefile.am libdbusmenu-16.04.0/libdbusmenu-gtk/Makefile.am
+--- libdbusmenu-16.04.0.orig/libdbusmenu-gtk/Makefile.am	2019-12-11 15:57:38.765791911 +0000
++++ libdbusmenu-16.04.0/libdbusmenu-gtk/Makefile.am	2019-12-11 15:59:29.158608691 +0000
+@@ -66,7 +66,7 @@
+ 	$(DBUSMENUGTK_CFLAGS) \
+ 	$(COVERAGE_CFLAGS) \
+ 	-I$(top_srcdir) \
+-	-Wall -Werror -Wno-error=deprecated-declarations \
++	-Wall -Wno-error=deprecated-declarations \
+ 	-DG_LOG_DOMAIN="\"LIBDBUSMENU-GTK\""
+ 
+ libdbusmenu_gtk_la_LIBADD = \
+diff -ur libdbusmenu-16.04.0.orig/libdbusmenu-gtk/Makefile.in libdbusmenu-16.04.0/libdbusmenu-gtk/Makefile.in
+--- libdbusmenu-16.04.0.orig/libdbusmenu-gtk/Makefile.in	2019-12-11 15:57:38.765791911 +0000
++++ libdbusmenu-16.04.0/libdbusmenu-gtk/Makefile.in	2019-12-11 16:03:46.264566713 +0000
+@@ -507,7 +507,7 @@
+ 	$(DBUSMENUGTK_CFLAGS) \
+ 	$(COVERAGE_CFLAGS) \
+ 	-I$(top_srcdir) \
+-	-Wall -Werror -Wno-error=deprecated-declarations \
++	-Wall  -Wno-error=deprecated-declarations \
+ 	-DG_LOG_DOMAIN="\"LIBDBUSMENU-GTK\""
+ 
+ libdbusmenu_gtk_la_LIBADD = \
+diff -ur libdbusmenu-16.04.0.orig/tests/Makefile.am libdbusmenu-16.04.0/tests/Makefile.am
+--- libdbusmenu-16.04.0.orig/tests/Makefile.am	2019-12-11 15:57:38.765791911 +0000
++++ libdbusmenu-16.04.0/tests/Makefile.am	2019-12-11 15:59:43.054712688 +0000
+@@ -103,7 +103,7 @@
+ ############################################
+ 
+ DBUSMENU_GLIB_TEST_CFLAGS = \
+-	-Wall -Werror \
++	-Wall \
+ 	-DG_DISABLE_DEPRECATED \
+ 	-I$(top_srcdir) \
+ 	$(DBUSMENUTESTS_CFLAGS) \
+diff -ur libdbusmenu-16.04.0.orig/tests/Makefile.in libdbusmenu-16.04.0/tests/Makefile.in
+--- libdbusmenu-16.04.0.orig/tests/Makefile.in	2019-12-11 15:57:38.765791911 +0000
++++ libdbusmenu-16.04.0/tests/Makefile.in	2019-12-11 16:03:46.244566559 +0000
+@@ -979,7 +979,7 @@
+ # Shared vars for the dbusmenu-glib tests
+ ############################################
+ DBUSMENU_GLIB_TEST_CFLAGS = \
+-	-Wall -Werror \
++	-Wall  \
+ 	-DG_DISABLE_DEPRECATED \
+ 	-I$(top_srcdir) \
+ 	$(DBUSMENUTESTS_CFLAGS) \
+diff -ur libdbusmenu-16.04.0.orig/tools/Makefile.am libdbusmenu-16.04.0/tools/Makefile.am
+--- libdbusmenu-16.04.0.orig/tools/Makefile.am	2019-12-11 15:57:38.761791881 +0000
++++ libdbusmenu-16.04.0/tools/Makefile.am	2019-12-11 15:59:53.942794342 +0000
+@@ -16,7 +16,7 @@
+ 	-I $(srcdir)/.. \
+ 	$(DBUSMENUGLIB_CFLAGS) \
+ 	$(DBUSMENUDUMPER_CFLAGS) \
+-	-Wall -Werror
++	-Wall
+ 
+ dbusmenu_dumper_LDADD = \
+ 	../libdbusmenu-glib/libdbusmenu-glib.la \
+diff -ur libdbusmenu-16.04.0.orig/tools/Makefile.in libdbusmenu-16.04.0/tools/Makefile.in
+--- libdbusmenu-16.04.0.orig/tools/Makefile.in	2019-12-11 15:57:38.761791881 +0000
++++ libdbusmenu-16.04.0/tools/Makefile.in	2019-12-11 16:03:46.252566621 +0000
+@@ -454,7 +454,7 @@
+ 	-I $(srcdir)/.. \
+ 	$(DBUSMENUGLIB_CFLAGS) \
+ 	$(DBUSMENUDUMPER_CFLAGS) \
+-	-Wall -Werror
++	-Wall 
+ 
+ dbusmenu_dumper_LDADD = \
+ 	../libdbusmenu-glib/libdbusmenu-glib.la \
+diff -ur libdbusmenu-16.04.0.orig/tools/testapp/Makefile.am libdbusmenu-16.04.0/tools/testapp/Makefile.am
+--- libdbusmenu-16.04.0.orig/tools/testapp/Makefile.am	2019-12-11 15:57:38.761791881 +0000
++++ libdbusmenu-16.04.0/tools/testapp/Makefile.am	2019-12-11 16:00:45.183180514 +0000
+@@ -12,7 +12,7 @@
+ 	-I $(srcdir)/../.. \
+ 	$(DBUSMENUTESTS_CFLAGS) \
+ 	$(DBUSMENUGLIB_CFLAGS) \
+-	-Wall -Werror
++	-Wall
+ 
+ dbusmenu_testapp_LDADD = \
+ 	$(builddir)/../../libdbusmenu-glib/libdbusmenu-glib.la \
+diff -ur libdbusmenu-16.04.0.orig/tools/testapp/Makefile.in libdbusmenu-16.04.0/tools/testapp/Makefile.in
+--- libdbusmenu-16.04.0.orig/tools/testapp/Makefile.in	2019-12-11 15:57:38.761791881 +0000
++++ libdbusmenu-16.04.0/tools/testapp/Makefile.in	2019-12-11 16:03:46.248566590 +0000
+@@ -377,7 +377,7 @@
+ 	-I $(srcdir)/../.. \
+ 	$(DBUSMENUTESTS_CFLAGS) \
+ 	$(DBUSMENUGLIB_CFLAGS) \
+-	-Wall -Werror
++	-Wall 
+ 
+ dbusmenu_testapp_LDADD = \
+ 	$(builddir)/../../libdbusmenu-glib/libdbusmenu-glib.la \
