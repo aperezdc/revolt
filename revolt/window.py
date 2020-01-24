@@ -30,6 +30,10 @@ class MainWindow(Gtk.ApplicationWindow):
 
         if application.settings.get_boolean("use-header-bar"):
             self.set_titlebar(self.__make_headerbar())
+
+        if application.settings.get_boolean("hide-on-window-close"):
+            self.connect("delete-event", self.__hide_on_destroy)
+
         self.set_title(u"Revolt")
         application.add_window(self)
         self._webview = WebKit2.WebView(user_content_manager=self._user_content_manager,
@@ -215,6 +219,10 @@ class MainWindow(Gtk.ApplicationWindow):
         self._webview.connect("show-notification", self.__on_show_notification)
         self._webview.connect("permission-request", self.__on_permission_request)
 
+    def __hide_on_destroy(self, widget, event):
+        self.hide()
+        return True
+
     def reload_riot(self, bypass_cache=False):
         if bypass_cache:
             self._webview.reload_bypass_cache()
@@ -232,7 +240,6 @@ class MainWindow(Gtk.ApplicationWindow):
         self._webview.load_uri(urlunsplit(url))
 
     def finish(self):
-        # TODO: Most likely this can be moved to do_destroy()
         self._webview.stop_loading()
         self.hide()
         self.destroy()
