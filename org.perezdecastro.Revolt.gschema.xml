@@ -18,6 +18,10 @@
 			<summary>Whether to use a header bar. Disabling uses the decorations provided by the window manager.</summary>
 			<default>true</default>
 		</key>
+		<key name="hide-on-window-close" type="b">
+			<summary>Hide the window instead of closing it when the window close button (X) is activated.</summary>
+			<default>false</default>
+		</key>
 
 		<child name="saved-state" schema="org.perezdecastro.Revolt.State"/>
 	</schema>
