@@ -1,7 +1,7 @@
 {
   "app-id": "org.perezdecastro.Revolt",
   "runtime": "org.gnome.Platform",
-  "runtime-version": "3.28",
+  "runtime-version": "3.34",
   "sdk": "org.gnome.Sdk",
   "command": "revolt",
   "finish-args": [
@@ -32,23 +32,41 @@
     "strip": false
   },
   "cleanup": [
+    "/bin/intltool-*",
+    "/bin/intltoolize",
     "/include",
     "/lib/*.la",
+    "/lib/pkgconfig",
     "/libexec",
+    "/share/aclocal",
     "/share/doc",
-    "/share/gtk-doc"
+    "/share/gtk-doc",
+    "/share/intltool",
+    "/share/man"
   ],
   "modules": [
+    {
+      "name": "intltool",
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://launchpad.net/intltool/trunk/0.51.0/+download/intltool-0.51.0.tar.gz",
+          "sha256": "67c74d94196b153b774ab9f89b2fa6c6ba79352407037c8c14d5aeb334e959cd"
+        }
+      ]
+    },
     {
       "name": "libdbusmenu",
       "build-options": {
         "env": {
           "HAVE_VALGRIND_TRUE": "#",
-          "HAVE_VALGRIND_FALSE": ""
+          "HAVE_VALGRIND_FALSE": "",
+          "CFLAGS": "-Wno-error"
         }
       },
       "config-opts": [
         "--with-gtk=3",
+        "--disable-nls",
         "--disable-dumper",
         "--disable-static",
         "--disable-tests",
