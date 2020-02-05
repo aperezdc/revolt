@@ -105,7 +105,6 @@ class MainWindow(Gtk.ApplicationWindow):
     def _web_context(self):
         print("Creating WebContext...")
         ctx = WebKit2.WebContext(website_data_manager=self._website_data_manager)
-        ctx.set_web_process_count_limit(1)
         ctx.set_spell_checking_enabled(False)
         ctx.set_tls_errors_policy(WebKit2.TLSErrorsPolicy.FAIL)
         return ctx
