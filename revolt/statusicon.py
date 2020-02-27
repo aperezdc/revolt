@@ -265,4 +265,7 @@ class StatusIcon(object):
     # Delegate methods.
     def on_icon_activate(self, icon_impl):
         self.clear_notifications()
-        self.__app.show()
+        if self.__app.is_visible_and_focused():
+            self.__app.hide()
+        else:
+            self.__app.show()
