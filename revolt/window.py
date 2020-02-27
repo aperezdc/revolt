@@ -219,7 +219,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self._webview.connect("permission-request", self.__on_permission_request)
 
     def __hide_on_destroy(self, widget, event):
-        self.hide()
+        self.application.hide()
         return True
 
     def reload_riot(self, bypass_cache=False):

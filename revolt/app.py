@@ -46,6 +46,7 @@ class RevoltApp(Gtk.Application):
                                      path="/" + APP_ID.replace(".", "/") + "/")
         self.riot_url = self.settings.get_string("riot-url")
         self.window = None
+        self._last_window_geometry = None
         self.statusicon = None
         self.connect("shutdown", self.__on_shutdown)
         self.connect("activate", self.__on_activate)
@@ -129,6 +130,35 @@ class RevoltApp(Gtk.Application):
         self.show()
         self.window.load_settings_page()
 
+    def __save_window_geometry(self):
+        window_size = self.window.get_size()
+        window_position = self.window.get_position()
+        self._last_window_geometry = {"width": window_size.width,
+                                      "height": window_size.height,
+                                      "root_x": window_position.root_x,
+                                      "root_y": window_position.root_y}
+
+    def __restore_window_geometry(self):
+        if not self._last_window_geometry:
+            return
+        self.window.resize(self._last_window_geometry["width"],
+                           self._last_window_geometry["height"])
+        self.window.move(self._last_window_geometry["root_x"],
+                         self._last_window_geometry["root_y"])
+        # invalidate _last_window_geometry after restoring to ensure to
+        # not restore again if the users clicks on the status icon when
+        # the window is not hidden (like when minimized, or not focused)
+        # self.hide() will take care of setting a new saved geometry.
+        self._last_window_geometry = None
+
     def show(self):
+        self.__restore_window_geometry()
         self.window.show()
         self.window.present()
+
+    def hide(self):
+        self.__save_window_geometry()
+        self.window.hide()
+
+    def is_visible_and_focused(self):
+        return self.window.props.visible and self.window.props.has_toplevel_focus
