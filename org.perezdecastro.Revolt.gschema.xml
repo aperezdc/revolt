@@ -2,8 +2,8 @@
 <schemalist>
 	<schema id="org.perezdecastro.Revolt">
 		<key name="riot-url" type="s">
-			<summary>Base URL of the Riot installation wrapped by Revolt</summary>
-			<default>"https://riot.im/app"</default>
+			<summary>Base URL of the Element installation wrapped by Revolt</summary>
+			<default>"https://app.element.io"</default>
 		</key>
 		<key name="zoom-factor" type="d">
 			<summary>Zoom factor applied to to application</summary>

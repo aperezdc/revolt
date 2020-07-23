@@ -36,7 +36,7 @@ def __window_modify_zoom(accel_group, window, key, modifiers):
 
 
 def __window_webview_reload(accel_group, window, key, modifiers):
-    window.reload_riot(bypass_cache=True)
+    window.reload_element(bypass_cache=True)
 
 
 window_keys = Gtk.AccelGroup()
