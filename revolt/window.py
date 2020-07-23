@@ -127,7 +127,7 @@ class MainWindow(Gtk.ApplicationWindow):
         if decision_type == WebKit2.PolicyDecisionType.NAVIGATION_ACTION:
             if decision.get_navigation_type() == WebKit2.NavigationType.LINK_CLICKED:
                 uri = decision.get_request().get_uri()
-                if not uri.startswith(self.application.riot_url):
+                if not uri.startswith(self.application.element_url):
                     show_uri(self, uri)
                     return True
         elif decision_type == WebKit2.PolicyDecisionType.NEW_WINDOW_ACTION:
@@ -142,9 +142,9 @@ class MainWindow(Gtk.ApplicationWindow):
         action = Gio.SimpleAction.new("preferences")
         action.connect("activate", self.application.on_app_preferences)
         action_list.append((action, "_Preferences"))
-        action = Gio.SimpleAction.new("riot-settings")
-        action.connect("activate", self.application.on_riot_settings)
-        action_list.append((action, "_Riot Settings"))
+        action = Gio.SimpleAction.new("element-settings")
+        action.connect("activate", self.application.on_element_settings)
+        action_list.append((action, "_Element Settings"))
         return tuple(action_list)
 
     def __on_context_menu(self, webview, menu, event, hit_test):
@@ -222,14 +222,14 @@ class MainWindow(Gtk.ApplicationWindow):
         self.application.hide()
         return True
 
-    def reload_riot(self, bypass_cache=False):
+    def reload_element(self, bypass_cache=False):
         if bypass_cache:
             self._webview.reload_bypass_cache()
         else:
             self._webview.reload()
 
-    def load_riot(self):
-        self._webview.load_uri(self.application.riot_url)
+    def load_element(self):
+        self._webview.load_uri(self.application.element_url)
         return self
 
     def load_settings_page(self):

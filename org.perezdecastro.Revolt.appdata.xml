@@ -4,14 +4,14 @@
 	<metadata_license>CC-BY-SA-3.0</metadata_license>
 	<project_license>GPL-3.0</project_license>
 	<name>Revolt</name>
-	<summary>Better integration of Riot, a Matrix client, with desktop environments</summary>
+	<summary>Better integration of Element, a Matrix client, with desktop environments</summary>
 	<description>
 		<p>
-			Revolt is a small application which wraps Riot to provide better integration
+			Revolt is a small application which wraps Element to provide better integration
 			with desktop environments in general, and GNOME in particular:
 		</p>
 		<ul>
-			<li>Having Riot as a “standalone” application instead of it living in a browser tab</li>
+			<li>Having Element as a “standalone” application instead of it living in a browser tab</li>
 			<li>Persistent notifications (for desktop environments supporting them, i.e. GNOME)</li>
 			<li>Notifications are automatically prevented when the Revolt window is focused</li>
 			<li>Status icon for desktop environment which have a tray bar applet (XFCE, Budgie, likely many others)</li>
