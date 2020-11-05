@@ -10,6 +10,15 @@ from gi.repository import Gtk, Gdk, GLib
 
 
 def __window_close(accel_group, window, key, modifiers):
+    """
+    Close a window group.
+
+    Args:
+        accel_group: (str): write your description
+        window: (int): write your description
+        key: (str): write your description
+        modifiers: (str): write your description
+    """
     assert isinstance(window, Gtk.Window)
     window.close()
 
@@ -19,6 +28,15 @@ window_close_on_escape.connect(Gdk.KEY_Escape, 0, 0, __window_close)
 
 
 def __window_modify_zoom(accel_group, window, key, modifiers):
+    """
+    Changes the window in zoom group.
+
+    Args:
+        accel_group: (str): write your description
+        window: (int): write your description
+        key: (str): write your description
+        modifiers: (todo): write your description
+    """
     if key == Gdk.KEY_0:
         window.application.settings.reset("zoom-factor")
     else:
@@ -36,6 +54,15 @@ def __window_modify_zoom(accel_group, window, key, modifiers):
 
 
 def __window_webview_reload(accel_group, window, key, modifiers):
+    """
+    Reloads the webview window for a window.
+
+    Args:
+        accel_group: (todo): write your description
+        window: (todo): write your description
+        key: (str): write your description
+        modifiers: (todo): write your description
+    """
     window.reload_element(bypass_cache=True)
 
 
