@@ -19,15 +19,42 @@ class Status(enum.Enum):
 
 class StatusIconImpl(object):
     def __init__(self, delegate):
+        """
+        Initialize the widget.
+
+        Args:
+            self: (todo): write your description
+            delegate: (str): write your description
+        """
         self.delegate = delegate
 
     def __del__(self):
+        """
+        Deletes the window.
+
+        Args:
+            self: (todo): write your description
+        """
         self.delegate = None
 
     def set_tooltip(self, text):
+        """
+        Sets the tooltip.
+
+        Args:
+            self: (todo): write your description
+            text: (str): write your description
+        """
         raise NotImplementedError
 
     def set_status(self, status):
+        """
+        Sets the status of the task.
+
+        Args:
+            self: (todo): write your description
+            status: (str): write your description
+        """
         raise NotImplementedError
 
 
@@ -35,6 +62,16 @@ class StatusIconImplSNI(StatusIconImpl):
     ICON_PIXBUF_SIZE = 64  # This seems to be a reasonable size for all DEs.
 
     def __init__(self, delegate, context_menu, app, failure_callback):
+        """
+        Initialize the plugin.
+
+        Args:
+            self: (todo): write your description
+            delegate: (str): write your description
+            context_menu: (todo): write your description
+            app: (todo): write your description
+            failure_callback: (callable): write your description
+        """
         super().__init__(delegate)
 
         import gi
@@ -85,6 +122,13 @@ class StatusIconImplSNI(StatusIconImpl):
         self._sni.register()
 
     def set_status(self, status):
+        """
+        Sets the status of this chart.
+
+        Args:
+            self: (todo): write your description
+            status: (str): write your description
+        """
         if status is Status.BLINKING:
             self._sni.set_status(self.SNI_ATTENTION)
         else:
@@ -97,15 +141,39 @@ class StatusIconImplSNI(StatusIconImpl):
                 assert False, "Unrechable"
 
     def __on_registration_failed(self, sni, error):
+        """
+        Called when an error occurred.
+
+        Args:
+            self: (todo): write your description
+            sni: (todo): write your description
+            error: (todo): write your description
+        """
         assert sni == self._sni
         print("StatusNotifier registration failed, falling back to GtkStatusIcon")
         self._failure_callback(self)
 
     def __on_activate(self, sni, x, y):
+        """
+        Set the icon on the canvas.
+
+        Args:
+            self: (todo): write your description
+            sni: (array): write your description
+            x: (array): write your description
+            y: (array): write your description
+        """
         assert sni == self._sni
         self.delegate.on_icon_activate(self)
 
     def set_tooltip(self, text):
+        """
+        Sets the tooltip.
+
+        Args:
+            self: (todo): write your description
+            text: (str): write your description
+        """
         self._sni.freeze_tooltip()
         self._sni.set_tooltip_body("" if text is None else text)
         self._sni.thaw_tooltip()
@@ -120,6 +188,15 @@ class StatusIconImplGSI(StatusIconImpl):
     }
 
     def __init__(self, delegate, context_menu, app):
+        """
+        Initialize the interface
+
+        Args:
+            self: (todo): write your description
+            delegate: (str): write your description
+            context_menu: (todo): write your description
+            app: (todo): write your description
+        """
         super().__init__(delegate)
         self._status = Status.DISCONNECTED
         self._contextmenu = context_menu
@@ -137,12 +214,26 @@ class StatusIconImplGSI(StatusIconImpl):
         self._icon.connect("size-changed", self.__on_icon_size_change)
 
     def set_tooltip(self, text):
+        """
+        Sets the tooltip text.
+
+        Args:
+            self: (todo): write your description
+            text: (str): write your description
+        """
         if text is None:
             self._icon.set_tooltip_text("Revolt")
         else:
             self._icon.set_tooltip_markup("<b>Revolt</b>\n{!s}".format(text))
 
     def set_status(self, status):
+        """
+        Sets the status.
+
+        Args:
+            self: (todo): write your description
+            status: (str): write your description
+        """
         if status is Status.BLINKING:
             # We only want one blink callback active at a time.
             if self._status is not Status.BLINKING:
@@ -152,6 +243,14 @@ class StatusIconImplGSI(StatusIconImpl):
         self._status = status
 
     def __load_icons(self, size, app=None):
+        """
+        Load icons
+
+        Args:
+            self: (todo): write your description
+            size: (int): write your description
+            app: (todo): write your description
+        """
         if app is None:
             app = Gtk.Application.get_default()
         self._size = size
@@ -163,6 +262,13 @@ class StatusIconImplGSI(StatusIconImpl):
                                                      Gtk.IconLookupFlags.FORCE_SYMBOLIC)
 
     def __draw_icon(self, status=None):
+        """
+        Draws the icon
+
+        Args:
+            self: (todo): write your description
+            status: (str): write your description
+        """
         if status is None:
             status = self._status
         if status is Status.BLINKING:
@@ -175,15 +281,39 @@ class StatusIconImplGSI(StatusIconImpl):
         return False
 
     def __on_activate(self, icon):
+        """
+        Triggers the icon.
+
+        Args:
+            self: (todo): write your description
+            icon: (str): write your description
+        """
         assert icon == self._icon
         self.delegate.on_icon_activate(self)
 
     def __on_popup_menu(self, icon, button, time):
+        """
+        Displays the context menu.
+
+        Args:
+            self: (todo): write your description
+            icon: (todo): write your description
+            button: (todo): write your description
+            time: (int): write your description
+        """
         assert icon == self._icon
         self._contextmenu.show_all()
         self._contextmenu.popup(None, None, None, self._icon, button, time)
 
     def __on_icon_size_change(self, statusicon, size):
+        """
+        Draw icon icon.
+
+        Args:
+            self: (todo): write your description
+            statusicon: (todo): write your description
+            size: (int): write your description
+        """
         if size > 31:
             icon_size = "32"
         elif size > 23:
@@ -198,6 +328,12 @@ class StatusIconImplGSI(StatusIconImpl):
         self.__draw_icon()
 
     def __blink(self):
+        """
+        Blink.
+
+        Args:
+            self: (todo): write your description
+        """
         self._flipflop = not self._flipflop
         self.__draw_icon()
         return self._status is Status.BLINKING
@@ -205,6 +341,16 @@ class StatusIconImplGSI(StatusIconImpl):
 
 class StatusIcon(object):
     def __init__(self, app, initial_status=Status.DISCONNECTED):
+        """
+        Initialize the extension.
+
+        Args:
+            self: (todo): write your description
+            app: (todo): write your description
+            initial_status: (str): write your description
+            Status: (str): write your description
+            DISCONNECTED: (str): write your description
+        """
         self.status = Status(initial_status)
         self.__app = app
         self.__tooltip = None
@@ -218,16 +364,35 @@ class StatusIcon(object):
         self.__configure_impl()
 
     def __sni_failed(self, sni_impl):
+        """
+        Configure the sni.
+
+        Args:
+            self: (todo): write your description
+            sni_impl: (str): write your description
+        """
         # Use the (deprecated) GtkStatusIcon as fallback
         self._impl = StatusIconImplGSI(self, self._contextmenu, self.__app)
         self.__configure_impl()
 
     def __configure_impl(self):
+        """
+        Configure the tooltip.
+
+        Args:
+            self: (todo): write your description
+        """
         self._impl.set_tooltip(None)
         self.clear_notifications()
 
     @cachedproperty
     def _contextmenu(self):
+        """
+        Return context menu.
+
+        Args:
+            self: (todo): write your description
+        """
         model = self.__app.get_menu_by_id("app-menu")
         if model is None:
             # If showing the application menu in the GNOME Shell top bar is
@@ -237,6 +402,13 @@ class StatusIcon(object):
         return Gtk.Menu.new_from_model(model)
 
     def __add_notification_tooltip_text(self, text):
+        """
+        Adds a tooltip text.
+
+        Args:
+            self: (todo): write your description
+            text: (str): write your description
+        """
         if self.__tooltip is None:
             self.__tooltip = text
         else:
@@ -245,25 +417,58 @@ class StatusIcon(object):
         self._impl.set_tooltip(self.__tooltip)
 
     def __clear_notification_tooltip_text(self):
+        """
+        Clear the tooltiptip.
+
+        Args:
+            self: (todo): write your description
+        """
         self._impl.set_tooltip(None)
         self.__tooltip = None
 
     def set_status(self, status):
+        """
+        Set the status of the message.
+
+        Args:
+            self: (todo): write your description
+            status: (str): write your description
+        """
         status = Status(status)
         if status is not self.status:
             self.status = status
             self._impl.set_status(self.status)
 
     def add_notification(self, text):
+        """
+        Add a notification.
+
+        Args:
+            self: (todo): write your description
+            text: (str): write your description
+        """
         self.__add_notification_tooltip_text(text)
         self.set_status(Status.BLINKING)
 
     def clear_notifications(self):
+        """
+        Clear the notification notifications.
+
+        Args:
+            self: (todo): write your description
+        """
         self.__clear_notification_tooltip_text()
         self.set_status(Status.CONNECTED)
 
     # Delegate methods.
     def on_icon_activate(self, icon_impl):
+        """
+        Show icon_icon_impl.
+
+        Args:
+            self: (todo): write your description
+            icon_impl: (todo): write your description
+        """
         self.clear_notifications()
         if self.__app.is_visible_and_focused():
             self.__app.hide()

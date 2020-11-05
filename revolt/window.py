@@ -16,6 +16,14 @@ class MainWindow(Gtk.ApplicationWindow):
     network_busy = GObject.Property(type=bool, default=False)
 
     def __init__(self, application, saved_state):
+        """
+        Initialize the application
+
+        Args:
+            self: (todo): write your description
+            application: (todo): write your description
+            saved_state: (todo): write your description
+        """
         self.application = application
         self.saved_state = saved_state
         Gtk.ApplicationWindow.__init__(self,
@@ -78,6 +86,13 @@ class MainWindow(Gtk.ApplicationWindow):
         self.__notification_ids = set()
 
     def do_configure_event(self, event):
+        """
+        Configure the application
+
+        Args:
+            self: (todo): write your description
+            event: (todo): write your description
+        """
         result = Gtk.ApplicationWindow.do_configure_event(self, event)
         width, height = self.get_size()
         self.saved_state.set_uint("width", width)
@@ -85,6 +100,12 @@ class MainWindow(Gtk.ApplicationWindow):
         return result
 
     def __make_headerbar(self):
+        """
+        Build gtk header.
+
+        Args:
+            self: (todo): write your description
+        """
         header = Gtk.HeaderBar()
         header.set_show_close_button(True)
         header.get_style_context().add_class("revolt-slim")
@@ -97,6 +118,12 @@ class MainWindow(Gtk.ApplicationWindow):
 
     @cachedproperty
     def _website_data_manager(self):
+        """
+        Return the manager manager.
+
+        Args:
+            self: (todo): write your description
+        """
         from os import path as P
         print("Creating WebsiteDataManager...")
         app_id = self.application.get_application_id()
@@ -107,6 +134,12 @@ class MainWindow(Gtk.ApplicationWindow):
 
     @cachedproperty
     def _web_context(self):
+        """
+        Initiate web context webdriver context.
+
+        Args:
+            self: (todo): write your description
+        """
         print("Creating WebContext...")
         ctx = WebKit2.WebContext(website_data_manager=self._website_data_manager)
         ctx.set_spell_checking_enabled(False)
@@ -115,6 +148,12 @@ class MainWindow(Gtk.ApplicationWindow):
 
     @cachedproperty
     def _user_content_manager(self):
+        """
+        Creates a pywbemap user - agent manager.
+
+        Args:
+            self: (todo): write your description
+        """
         mgr = WebKit2.UserContentManager()
         script = WebKit2.UserScript("Notification.requestPermission();",
                                     WebKit2.UserContentInjectedFrames.TOP_FRAME,
@@ -124,6 +163,15 @@ class MainWindow(Gtk.ApplicationWindow):
         return mgr
 
     def __on_decide_policy(self, webview, decision, decision_type):
+        """
+        The decision policy. json or not.
+
+        Args:
+            self: (todo): write your description
+            webview: (todo): write your description
+            decision: (todo): write your description
+            decision_type: (str): write your description
+        """
         if decision_type == WebKit2.PolicyDecisionType.NAVIGATION_ACTION:
             if decision.get_navigation_type() == WebKit2.NavigationType.LINK_CLICKED:
                 uri = decision.get_request().get_uri()
@@ -138,6 +186,12 @@ class MainWindow(Gtk.ApplicationWindow):
 
     @cachedproperty
     def _context_menu_actions(self):
+        """
+        Create context menu actions.
+
+        Args:
+            self: (todo): write your description
+        """
         action_list = []
         action = Gio.SimpleAction.new("preferences")
         action.connect("activate", self.application.on_app_preferences)
@@ -148,6 +202,16 @@ class MainWindow(Gtk.ApplicationWindow):
         return tuple(action_list)
 
     def __on_context_menu(self, webview, menu, event, hit_test):
+        """
+        When a context menu.
+
+        Args:
+            self: (todo): write your description
+            webview: (todo): write your description
+            menu: (todo): write your description
+            event: (todo): write your description
+            hit_test: (todo): write your description
+        """
         # Tweak built-in entries.
         for action in (WebKit2.ContextMenuAction.GO_BACK,
                        WebKit2.ContextMenuAction.GO_FORWARD,
@@ -165,6 +229,14 @@ class MainWindow(Gtk.ApplicationWindow):
         return False
 
     def __on_has_toplevel_focus_changed(self, window, has_focus):
+        """
+        Changes the focus notification.
+
+        Args:
+            self: (todo): write your description
+            window: (todo): write your description
+            has_focus: (todo): write your description
+        """
         assert window == self
         if window.has_toplevel_focus():
             # Clear the window's urgency hint
@@ -176,6 +248,14 @@ class MainWindow(Gtk.ApplicationWindow):
             self.application.statusicon.clear_notifications()
 
     def __on_load_changed(self, webview, event):
+        """
+        Called when a bus is changed
+
+        Args:
+            self: (todo): write your description
+            webview: (str): write your description
+            event: (todo): write your description
+        """
         if event == WebKit2.LoadEvent.FINISHED:
             self.network_busy = False
             self.application.statusicon.set_status(statusicon.Status.CONNECTED)
@@ -185,10 +265,24 @@ class MainWindow(Gtk.ApplicationWindow):
 
     @cachedproperty
     def _notification_icon(self):
+        """
+        Return a new notification.
+
+        Args:
+            self: (todo): write your description
+        """
         icon_id = self.application.get_application_id() + "-symbolic"
         return Gio.ThemedIcon.new(icon_id)
 
     def __on_show_notification(self, webview, notification):
+        """
+        Handle a notification notification.
+
+        Args:
+            self: (todo): write your description
+            webview: (todo): write your description
+            notification: (todo): write your description
+        """
         # TODO: Handle notification clicked, and so
         if not self.has_toplevel_focus():
             self.set_urgency_hint(True)
@@ -208,37 +302,84 @@ class MainWindow(Gtk.ApplicationWindow):
         return True
 
     def __on_permission_request(self, webview, request):
+        """
+        Decorator to see if the request is granted.
+
+        Args:
+            self: (todo): write your description
+            webview: (todo): write your description
+            request: (todo): write your description
+        """
         if isinstance(request, WebKit2.NotificationPermissionRequest):
             request.allow()
             return True
 
     def __connect_widgets(self):
+        """
+        Connects to the main window
+
+        Args:
+            self: (todo): write your description
+        """
         self.connect("notify::has-toplevel-focus", self.__on_has_toplevel_focus_changed)
         self._webview.connect("load-changed", self.__on_load_changed)
         self._webview.connect("show-notification", self.__on_show_notification)
         self._webview.connect("permission-request", self.__on_permission_request)
 
     def __hide_on_destroy(self, widget, event):
+        """
+        Hide the underlying qt method
+
+        Args:
+            self: (todo): write your description
+            widget: (todo): write your description
+            event: (todo): write your description
+        """
         self.application.hide()
         return True
 
     def reload_element(self, bypass_cache=False):
+        """
+        Reloads the webview if it exists.
+
+        Args:
+            self: (todo): write your description
+            bypass_cache: (str): write your description
+        """
         if bypass_cache:
             self._webview.reload_bypass_cache()
         else:
             self._webview.reload()
 
     def load_element(self):
+        """
+        Loads the webview element.
+
+        Args:
+            self: (todo): write your description
+        """
         self._webview.load_uri(self.application.element_url)
         return self
 
     def load_settings_page(self):
+        """
+        Loads the page url.
+
+        Args:
+            self: (todo): write your description
+        """
         from urllib.parse import urlsplit, urlunsplit
         url = list(urlsplit(self._webview.get_uri()))
         url[-1] = "#settings"
         self._webview.load_uri(urlunsplit(url))
 
     def finish(self):
+        """
+        Stop the webview.
+
+        Args:
+            self: (todo): write your description
+        """
         self._webview.stop_loading()
         self.hide()
         self.destroy()

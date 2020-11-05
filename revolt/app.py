@@ -23,6 +23,12 @@ APP_AUTHORS = (u"Adrián Pérez de Castro <aperez@igalia.com>",
 
 
 def _find_resources_path(program_path):
+    """
+    Return the path to the resource directory.
+
+    Args:
+        program_path: (str): write your description
+    """
     from os import path as P
     devel = environ.get("__REVOLT_DEVELOPMENT")
     if devel and devel.strip():
@@ -38,6 +44,13 @@ def _find_resources_path(program_path):
 
 class RevoltApp(Gtk.Application):
     def __init__(self, program_path):
+        """
+        Initialize the gtk application.
+
+        Args:
+            self: (todo): write your description
+            program_path: (str): write your description
+        """
         Gio.Resource.load(_find_resources_path(program_path))._register()
         Gtk.Application.__init__(self, application_id=APP_ID,
                                  resource_base_path="/" + DEFAULT_APP_ID.replace(".", "/"),
@@ -53,11 +66,26 @@ class RevoltApp(Gtk.Application):
         self.connect("startup", self.__on_startup)
 
     def __action(self, name, callback):
+        """
+        Create a new : class.
+
+        Args:
+            self: (todo): write your description
+            name: (str): write your description
+            callback: (callable): write your description
+        """
         action = Gio.SimpleAction.new(name)
         action.connect("activate", callback)
         self.add_action(action)
 
     def __on_startup(self, app):
+        """
+        When the main window
+
+        Args:
+            self: (todo): write your description
+            app: (todo): write your description
+        """
         gtk_settings = Gtk.Settings.get_default()
         gtk_settings.set_property("gtk-dialogs-use-header",
                                   self.settings.get_boolean("use-header-bar"))
@@ -72,10 +100,24 @@ class RevoltApp(Gtk.Application):
         self.__action("element-settings", self.on_element_settings)
 
     def __on_shutdown(self, app):
+        """
+        Shutdown the window
+
+        Args:
+            self: (todo): write your description
+            app: (todo): write your description
+        """
         if self.window is not None:
             self.window.finish()
 
     def __on_activate(self, app):
+        """
+        Changes window state
+
+        Args:
+            self: (todo): write your description
+            app: (todo): write your description
+        """
         if self.window is None:
             saved_state_path = self.settings.get_property("path")
             saved_state_path += "saved-state/main-window/"
@@ -85,6 +127,14 @@ class RevoltApp(Gtk.Application):
         self.show()
 
     def __on_app_about(self, action, param):
+        """
+        Called when a gtk application
+
+        Args:
+            self: (todo): write your description
+            action: (str): write your description
+            param: (todo): write your description
+        """
         dialog = Gtk.AboutDialog(transient_for=self.window,
                                  program_name=u"Revolt",
                                  authors=APP_AUTHORS,
@@ -96,10 +146,26 @@ class RevoltApp(Gtk.Application):
         dialog.present()
 
     def _build(self, resource, *names):
+        """
+        Build a builder.
+
+        Args:
+            self: (todo): write your description
+            resource: (dict): write your description
+            names: (str): write your description
+        """
         builder = Gtk.Builder.new_from_resource(self.get_resource_base_path() + "/" + resource)
         return (builder.get_object(name) for name in names)
 
     def on_app_preferences(self, action, param):
+        """
+        Load application preferences
+
+        Args:
+            self: (todo): write your description
+            action: (str): write your description
+            param: (todo): write your description
+        """
         window, url_entry, zoom_factor, zoom_factor_reset, devtools_toggle = \
                 self._build("gtk/preferences.ui",
                             "settings-window",
@@ -116,6 +182,12 @@ class RevoltApp(Gtk.Application):
         url_entry.set_text(self.element_url)
 
         def on_hide(window):
+            """
+            Changes the current window
+
+            Args:
+                window: (int): write your description
+            """
             new_url = url_entry.get_text()
             if new_url != self.element_url:
                 self.settings.set_string("riot-url", new_url)
@@ -127,10 +199,24 @@ class RevoltApp(Gtk.Application):
         window.present()
 
     def on_element_settings(self, action, param):
+        """
+        Show main method
+
+        Args:
+            self: (todo): write your description
+            action: (str): write your description
+            param: (todo): write your description
+        """
         self.show()
         self.window.load_settings_page()
 
     def __save_window_geometry(self):
+        """
+        Save window geometry
+
+        Args:
+            self: (todo): write your description
+        """
         window_size = self.window.get_size()
         window_position = self.window.get_position()
         self._last_window_geometry = {"width": window_size.width,
@@ -139,6 +225,12 @@ class RevoltApp(Gtk.Application):
                                       "root_y": window_position.root_y}
 
     def __restore_window_geometry(self):
+        """
+        Restore window geometry.
+
+        Args:
+            self: (todo): write your description
+        """
         if not self._last_window_geometry:
             return
         self.window.resize(self._last_window_geometry["width"],
@@ -152,13 +244,31 @@ class RevoltApp(Gtk.Application):
         self._last_window_geometry = None
 
     def show(self):
+        """
+        Restore window
+
+        Args:
+            self: (todo): write your description
+        """
         self.__restore_window_geometry()
         self.window.show()
         self.window.present()
 
     def hide(self):
+        """
+        Hide window
+
+        Args:
+            self: (todo): write your description
+        """
         self.__save_window_geometry()
         self.window.hide()
 
     def is_visible_and_focused(self):
+        """
+        Returns true if the window is visible.
+
+        Args:
+            self: (todo): write your description
+        """
         return self.window.props.visible and self.window.props.has_toplevel_focus

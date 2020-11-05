@@ -13,6 +13,12 @@ gi.require_versions(dict(WebKit2="4.0",
 
 
 def main(program_path):
+    """
+    Main entry point.
+
+    Args:
+        program_path: (str): write your description
+    """
     # Honor CTRL+C http://stackoverflow.com/q/16410852
     import signal
     import sys

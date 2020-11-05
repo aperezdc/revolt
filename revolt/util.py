@@ -13,11 +13,27 @@ import os
 
 if hasattr(Gtk, "show_uri_on_window"):
     def show_uri(parent, uri, timestamp=None):
+        """
+        Show a gtk.
+
+        Args:
+            parent: (todo): write your description
+            uri: (str): write your description
+            timestamp: (int): write your description
+        """
         if timestamp is None:
             timestamp = Gdk.CURRENT_TIME
         Gtk.show_uri_on_window(parent, uri, timestamp)
 else:
     def show_uri(parent, uri, timestamp=None):
+        """
+        Show the gtk.
+
+        Args:
+            parent: (todo): write your description
+            uri: (str): write your description
+            timestamp: (int): write your description
+        """
         if timestamp is None:
             timestamp = Gdk.CURRENT_TIME
         Gtk.show_uri(None, uri, timestamp)
@@ -29,20 +45,47 @@ class CachedProperty(object):
     INVALID = object()
 
     def __init__(self, f):
+        """
+        Initialize the field
+
+        Args:
+            self: (todo): write your description
+            f: (int): write your description
+        """
         self.value = self.INVALID
         self.get_value = f
 
     def __call__(self, obj):
+        """
+        Calls the call to call.
+
+        Args:
+            self: (todo): write your description
+            obj: (todo): write your description
+        """
         if self.value is self.INVALID:
             self.value = self.get_value(obj)
         return self.value
 
 
 def cachedproperty(f, doc=None):
+    """
+    A property decorator which a property.
+
+    Args:
+        f: (todo): write your description
+        doc: (todo): write your description
+    """
     return property(CachedProperty(f), doc=doc)
 
 
 def desktop_is(desktopname):
+    """
+    Determine whether desktop desktop desktop desktop desktop.
+
+    Args:
+        desktopname: (str): write your description
+    """
     desktopname = desktopname.lower()
     if desktopname == "kde" and os.environ.get("KDE_FULL_SESSION") == "true":
         return True
