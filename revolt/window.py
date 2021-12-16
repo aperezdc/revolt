@@ -67,10 +67,8 @@ class MainWindow(Gtk.ApplicationWindow):
         websettings.set_minimum_font_size(12)  # TODO: Make it a setting
         websettings.set_property("enable-mediasource", True)
 
-        # This makes Revolt lighter, and makes things work for people using
-        # binary drivers (i.e. NVidia) with Flatpak build. See issue #29.
         if hasattr(websettings, "set_hardware_acceleration_policy"):
-            websettings.set_hardware_acceleration_policy(WebKit2.HardwareAccelerationPolicy.NEVER)
+            websettings.set_hardware_acceleration_policy(WebKit2.HardwareAccelerationPolicy.ALWAYS)
 
         self._webview.show_all()
         self.add(self._webview)
