@@ -10,7 +10,8 @@ set -e
 LOCAL="$(dirname "$0")/.flatpak-repo/"
 REMOTE='aperez@perezdecastro.org:/srv/http/flatpak.perezdecastro.org/revolt/'
 
-RSYNC_REPOS=$(type -P ostree-rsync-repos rsync-repos | head -1)
+RSYNC_REPOS=$(type -P ostree-rsync-repos rsync-repos \
+	"$(dirname "$0")/ostree-releng-scripts/rsync-repos" | head -1)
 if [[ -z ${RSYNC_REPOS} ]] ; then
 	echo "$0: The ostree-rsync-repos (or rsync-repos) tool is not installed."
 	echo 'Please install from https://github.com/ostreedev/ostree-releng-scripts'
